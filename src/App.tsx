@@ -30,6 +30,7 @@ import SupplierDashboard from "./pages/supplier/SupplierDashboard";
 import AddProduct from "./pages/supplier/AddProduct";
 import EditProduct from "./pages/supplier/EditProduct";
 import ProductList from "./pages/supplier/ProductList";
+import ProductLibrary from "./pages/supplier/ProductLibrary";
 import SupplierOrders from "./pages/supplier/Orders";
 import RFQInbox from "./pages/supplier/RFQInbox";
 
@@ -101,6 +102,11 @@ const App = () => (
           <Route path="/supplier/products" element={
             <ProtectedRoute allowedRoles={['supplier']}>
               <ProductList />
+            </ProtectedRoute>
+          } />
+          <Route path="/supplier/product-library" element={
+            <ProtectedRoute allowedRoles={['supplier']}>
+              <ProductLibrary />
             </ProtectedRoute>
           } />
           <Route path="/supplier/edit-product/:id" element={

@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Package, MessageSquare, FileText, TrendingUp, Eye, Plus } from 'lucide-react';
+import { Package, MessageSquare, FileText, TrendingUp, Eye, Plus, Library } from 'lucide-react';
 
 const SupplierDashboard = () => {
   const [stats, setStats] = useState({
@@ -111,11 +111,17 @@ const SupplierDashboard = () => {
               <CardHeader>
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
-              <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
                 <Button asChild className="h-auto py-6 flex-col">
                   <Link to="/supplier/add-product">
                     <Plus className="h-8 w-8 mb-2" />
                     Add Product
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="h-auto py-6 flex-col">
+                  <Link to="/supplier/product-library">
+                    <Library className="h-8 w-8 mb-2" />
+                    Product Library
                   </Link>
                 </Button>
                 <Button asChild variant="outline" className="h-auto py-6 flex-col">
