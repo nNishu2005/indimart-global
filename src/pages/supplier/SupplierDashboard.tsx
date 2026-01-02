@@ -53,14 +53,20 @@ const SupplierDashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card>
+          <Card className="border-primary/20">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">My Products</CardTitle>
-              <Package className="h-4 w-4 text-muted-foreground" />
+              <Package className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.products}</div>
-              <p className="text-xs text-muted-foreground">Listed products</p>
+              <div className="text-3xl font-bold text-primary">{stats.products}</div>
+              <p className="text-xs text-muted-foreground mb-3">Listed products</p>
+              <Button asChild size="sm" className="w-full">
+                <Link to="/supplier/add-product">
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Product
+                </Link>
+              </Button>
             </CardContent>
           </Card>
 
