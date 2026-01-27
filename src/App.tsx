@@ -33,6 +33,7 @@ import ProductList from "./pages/supplier/ProductList";
 import ProductLibrary from "./pages/supplier/ProductLibrary";
 import SupplierOrders from "./pages/supplier/Orders";
 import RFQInbox from "./pages/supplier/RFQInbox";
+import VendorOS from "./pages/supplier/VendorOS";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -122,6 +123,11 @@ const App = () => (
           <Route path="/supplier/rfq-inbox" element={
             <ProtectedRoute allowedRoles={['supplier']}>
               <RFQInbox />
+            </ProtectedRoute>
+          } />
+          <Route path="/supplier/vendor-os" element={
+            <ProtectedRoute allowedRoles={['supplier']}>
+              <VendorOS />
             </ProtectedRoute>
           } />
           
