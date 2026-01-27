@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Package, MessageSquare, FileText, TrendingUp, Eye, Plus, Library } from 'lucide-react';
+import { Package, MessageSquare, FileText, TrendingUp, Eye, Plus, Library, Globe } from 'lucide-react';
 
 const SupplierDashboard = () => {
   const [stats, setStats] = useState({
@@ -152,6 +152,12 @@ const SupplierDashboard = () => {
                   <Link to="/analytics">
                     <TrendingUp className="h-8 w-8 mb-2" />
                     Analytics
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="h-auto py-6 flex-col border-primary/30 bg-primary/5 hover:bg-primary/10">
+                  <Link to="/supplier/vendor-os">
+                    <Globe className="h-8 w-8 mb-2" />
+                    Vendor OS
                   </Link>
                 </Button>
               </CardContent>
