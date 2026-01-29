@@ -117,7 +117,7 @@ const SupplierDashboard = () => {
               <CardHeader>
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
-              <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+              <CardContent className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
                 <Button asChild className="h-auto py-6 flex-col">
                   <Link to="/supplier/add-product">
                     <Plus className="h-8 w-8 mb-2" />
