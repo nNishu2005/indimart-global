@@ -433,7 +433,11 @@ const Products = () => {
                             </div>
                           </div>
 
-                          <Button className="w-full" variant="default">
+                          <Button 
+                            className="w-full" 
+                            variant="default"
+                            onClick={() => navigate(`/buyer/supplier/${product.supplier_id}`)}
+                          >
                             <MessageSquare className="h-4 w-4 mr-2" />
                             Contact Supplier
                           </Button>
