@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
@@ -21,6 +22,7 @@ const Dashboard = () => {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { role, loading: roleLoading } = useUserRole();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -38,7 +40,20 @@ const Dashboard = () => {
     checkAuth();
   }, [navigate]);
 
-  if (loading) {
+  // Redirect based on user role
+  useEffect(() => {
+    if (!roleLoading && role) {
+      if (role === 'supplier') {
+        navigate('/supplier/dashboard');
+      } else if (role === 'buyer') {
+        navigate('/buyer/dashboard');
+      } else if (role === 'admin') {
+        navigate('/admin/dashboard');
+      }
+    }
+  }, [role, roleLoading, navigate]);
+
+  if (loading || roleLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-muted-foreground">Loading...</div>
