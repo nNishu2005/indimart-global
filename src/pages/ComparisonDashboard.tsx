@@ -43,15 +43,37 @@ const ComparisonDashboard = () => {
 
   // Calculate comparison insights
   const priceRanges = selectedProducts.map((p: any) => {
-    const match = p.price.match(/\$(\d+)-(\d+)/);
-    return match ? { min: parseInt(match[1]), max: parseInt(match[2]), avg: (parseInt(match[1]) + parseInt(match[2])) / 2 } : { min: 0, max: 0, avg: 0 };
+    // Handle numeric prices from database
+    if (typeof p.price === 'number') {
+      return { min: p.price, max: p.price, avg: p.price };
+    }
+    // Handle string prices like "$10-20"
+    if (typeof p.price === 'string') {
+      const match = p.price.match(/\$?(\d+)-(\d+)/);
+      if (match) {
+        return { min: parseInt(match[1]), max: parseInt(match[2]), avg: (parseInt(match[1]) + parseInt(match[2])) / 2 };
+      }
+      const singleMatch = p.price.match(/\$?(\d+)/);
+      if (singleMatch) {
+        const price = parseInt(singleMatch[1]);
+        return { min: price, max: price, avg: price };
+      }
+    }
+    return { min: 0, max: 0, avg: 0 };
   });
 
   const lowestPriceSupplier = selectedProducts[priceRanges.indexOf(priceRanges.reduce((min, p) => p.avg < min.avg ? p : min))];
   const avgPrice = priceRanges.reduce((sum, p) => sum + p.avg, 0) / priceRanges.length;
   const potentialSavings = Math.max(...priceRanges.map(p => p.avg)) - Math.min(...priceRanges.map(p => p.avg));
 
-  const moqValues = selectedProducts.map((p: any) => parseInt(p.moq.match(/\d+/)?.[0] || "0"));
+  const moqValues = selectedProducts.map((p: any) => {
+    if (typeof p.moq === 'number') return p.moq;
+    if (typeof p.moq === 'string') {
+      const match = p.moq.match(/\d+/);
+      return match ? parseInt(match[0]) : 0;
+    }
+    return 0;
+  });
   const lowestMOQ = Math.min(...moqValues);
 
   // Calculate total costs with shipping
