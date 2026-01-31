@@ -410,7 +410,10 @@ const Products = () => {
                             className="bg-background border-2 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                           />
                         </div>
-                        <div className="relative overflow-hidden aspect-[4/3] cursor-pointer">
+                        <div 
+                          className="relative overflow-hidden aspect-[4/3] cursor-pointer"
+                          onClick={() => navigate(`/product/${product.id}`)}
+                        >
                           <img 
                             src={product.images?.[0] || "/placeholder.svg"} 
                             alt={product.name}
@@ -424,7 +427,12 @@ const Products = () => {
                           )}
                         </div>
                         <CardContent className="p-4">
-                          <h3 className="font-semibold text-lg mb-2 line-clamp-2">{product.name}</h3>
+                          <h3 
+                            className="font-semibold text-lg mb-2 line-clamp-2 cursor-pointer hover:text-primary transition-colors"
+                            onClick={() => navigate(`/product/${product.id}`)}
+                          >
+                            {product.name}
+                          </h3>
                           <p className="text-sm text-muted-foreground mb-3">{product.category_name}</p>
                           
                           <div className="space-y-2 mb-4">
