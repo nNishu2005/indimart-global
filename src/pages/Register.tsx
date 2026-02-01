@@ -55,18 +55,12 @@ const Register = () => {
             first_name: firstName,
             last_name: lastName,
             company_name: company,
+            role: 'buyer', // Role is assigned server-side via database trigger
           },
         },
       });
 
       if (error) throw error;
-
-      if (data.user) {
-        await supabase.from('user_roles').insert({
-          user_id: data.user.id,
-          role: 'buyer',
-        });
-      }
 
       toast({
         title: "Success",
@@ -117,18 +111,12 @@ const Register = () => {
             last_name: lastName,
             company_name: company,
             phone: phone,
+            role: 'supplier', // Role is assigned server-side via database trigger
           },
         },
       });
 
       if (error) throw error;
-
-      if (data.user) {
-        await supabase.from('user_roles').insert({
-          user_id: data.user.id,
-          role: 'supplier',
-        });
-      }
 
       toast({
         title: "Success",
