@@ -527,7 +527,42 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      supplier_profiles_public: {
+        Row: {
+          avatar_url: string | null
+          city: string | null
+          company_description: string | null
+          company_name: string | null
+          country: string | null
+          created_at: string | null
+          id: string | null
+          is_verified: boolean | null
+          state: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          city?: string | null
+          company_description?: string | null
+          company_name?: string | null
+          country?: string | null
+          created_at?: string | null
+          id?: string | null
+          is_verified?: boolean | null
+          state?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          city?: string | null
+          company_description?: string | null
+          company_name?: string | null
+          country?: string | null
+          created_at?: string | null
+          id?: string | null
+          is_verified?: boolean | null
+          state?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
