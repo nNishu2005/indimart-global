@@ -9,24 +9,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
 import { 
   Building2, MapPin, CheckCircle, Package, MessageSquare, 
-  Phone, Mail, Globe, Star, ArrowLeft, FileText
+  Star, ArrowLeft, FileText
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
+// Safe profile interface - excludes PII fields (email, phone, pan_number, gst_number, full_name, address)
 interface SupplierProfile {
   id: string;
   company_name: string | null;
-  full_name: string | null;
-  email: string | null;
-  phone: string | null;
   city: string | null;
   state: string | null;
   country: string | null;
-  address: string | null;
   company_description: string | null;
   is_verified: boolean | null;
   avatar_url: string | null;
-  gst_number: string | null;
   created_at: string;
 }
 
@@ -70,10 +66,10 @@ const SupplierProfilePage = () => {
     const { data: { user } } = await supabase.auth.getUser();
     setCurrentUser(user);
 
-    // Load supplier profile
+    // Load supplier profile from safe view (excludes PII)
     const { data: profile } = await supabase
-      .from('profiles')
-      .select('*')
+      .from('supplier_profiles_public')
+      .select('id, company_name, company_description, avatar_url, city, state, country, is_verified, created_at')
       .eq('id', id)
       .single();
 
@@ -255,7 +251,6 @@ const SupplierProfilePage = () => {
             <TabsList>
               <TabsTrigger value="products">Products ({products.length})</TabsTrigger>
               <TabsTrigger value="reviews">Reviews ({reviews.length})</TabsTrigger>
-              <TabsTrigger value="contact">Contact Info</TabsTrigger>
             </TabsList>
 
             <TabsContent value="products">
@@ -329,40 +324,6 @@ const SupplierProfilePage = () => {
                   ))}
                 </div>
               )}
-            </TabsContent>
-
-            <TabsContent value="contact">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Contact Information</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {supplier.email && (
-                    <div className="flex items-center gap-3">
-                      <Mail className="h-5 w-5 text-muted-foreground" />
-                      <span>{supplier.email}</span>
-                    </div>
-                  )}
-                  {supplier.phone && (
-                    <div className="flex items-center gap-3">
-                      <Phone className="h-5 w-5 text-muted-foreground" />
-                      <span>{supplier.phone}</span>
-                    </div>
-                  )}
-                  {supplier.address && (
-                    <div className="flex items-center gap-3">
-                      <MapPin className="h-5 w-5 text-muted-foreground" />
-                      <span>{supplier.address}</span>
-                    </div>
-                  )}
-                  {supplier.gst_number && (
-                    <div className="flex items-center gap-3">
-                      <Globe className="h-5 w-5 text-muted-foreground" />
-                      <span>GST: {supplier.gst_number}</span>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
             </TabsContent>
           </Tabs>
         </div>

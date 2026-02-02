@@ -56,9 +56,10 @@ const SupplierList = () => {
     if (supplierRoles && supplierRoles.length > 0) {
       const supplierIds = supplierRoles.map(r => r.user_id);
       
+      // Use the safe view that excludes PII (email, phone, pan_number, gst_number)
       const { data: profiles } = await supabase
-        .from('profiles')
-        .select('*')
+        .from('supplier_profiles_public')
+        .select('id, company_name, city, state, country, company_description, is_verified, avatar_url')
         .in('id', supplierIds);
 
       // Get product counts for each supplier
