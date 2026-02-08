@@ -1,30 +1,30 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
-// Demo/fallback data – will be replaced with real queries as tables grow
-const DEMO_REVENUE_TREND = [
-  { month: 'Sep', revenue: 32000 },
-  { month: 'Oct', revenue: 48000 },
-  { month: 'Nov', revenue: 41000 },
-  { month: 'Dec', revenue: 67000 },
-  { month: 'Jan', revenue: 58000 },
-  { month: 'Feb', revenue: 72000 },
+// Demo trend data – will populate with real data once orders exist
+const EMPTY_REVENUE_TREND = [
+  { month: 'Sep', revenue: 0 },
+  { month: 'Oct', revenue: 0 },
+  { month: 'Nov', revenue: 0 },
+  { month: 'Dec', revenue: 0 },
+  { month: 'Jan', revenue: 0 },
+  { month: 'Feb', revenue: 0 },
 ];
 
-const DEMO_FUNNEL = [
-  { stage: 'Views', count: 1240 },
-  { stage: 'Inquiries', count: 86 },
-  { stage: 'Quotes', count: 34 },
-  { stage: 'Orders', count: 18 },
-  { stage: 'Paid', count: 14 },
+const EMPTY_FUNNEL = [
+  { stage: 'Views', count: 0 },
+  { stage: 'Inquiries', count: 0 },
+  { stage: 'Quotes', count: 0 },
+  { stage: 'Orders', count: 0 },
+  { stage: 'Paid', count: 0 },
 ];
 
-const DEMO_DELIVERY = [
-  { month: 'Oct', onTime: 8, delayed: 2, disputes: 0 },
-  { month: 'Nov', onTime: 10, delayed: 1, disputes: 1 },
-  { month: 'Dec', onTime: 12, delayed: 3, disputes: 0 },
-  { month: 'Jan', onTime: 9, delayed: 2, disputes: 1 },
-  { month: 'Feb', onTime: 11, delayed: 1, disputes: 0 },
+const EMPTY_DELIVERY = [
+  { month: 'Oct', onTime: 0, delayed: 0, disputes: 0 },
+  { month: 'Nov', onTime: 0, delayed: 0, disputes: 0 },
+  { month: 'Dec', onTime: 0, delayed: 0, disputes: 0 },
+  { month: 'Jan', onTime: 0, delayed: 0, disputes: 0 },
+  { month: 'Feb', onTime: 0, delayed: 0, disputes: 0 },
 ];
 
 export interface DashboardData {
@@ -100,15 +100,15 @@ export function useSupplierDashboardData(): DashboardData {
       const hasFunnelData = totalViews > 0 || inquiryCount > 0;
 
       setData({
-        revenue: { daily: 4800, weekly: 28500, monthly: 72000 },
-        orders: { completed: 14, pending: 4 },
-        payments: { received: 58000, pending: 10000, overdue: 4000 },
+        revenue: { daily: 0, weekly: 0, monthly: 0 },
+        orders: { completed: 0, pending: 0 },
+        payments: { received: 0, pending: 0, overdue: 0 },
         trustScore,
-        revenueTrend: DEMO_REVENUE_TREND,
-        funnel: hasFunnelData ? funnel : DEMO_FUNNEL,
-        buyerSource: { myBuyers: 8, platformBuyers: 12 },
-        buyerType: { repeat: 6, new: 14 },
-        deliveryDispute: DEMO_DELIVERY,
+        revenueTrend: EMPTY_REVENUE_TREND,
+        funnel: hasFunnelData ? funnel : EMPTY_FUNNEL,
+        buyerSource: { myBuyers: 0, platformBuyers: 0 },
+        buyerType: { repeat: 0, new: 0 },
+        deliveryDispute: EMPTY_DELIVERY,
         loading: false,
       });
     };
