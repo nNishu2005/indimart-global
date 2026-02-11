@@ -64,12 +64,19 @@ export function useSupplierDashboardData(): DashboardData {
 
       const userId = session.user.id;
 
-      // Fetch real counts from DB where available
-      const [productsRes, inquiriesRes, rfqRes, reviewsRes] = await Promise.all([
+      // Fetch real counts from DB
+      const now = new Date();
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+      const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7).toISOString();
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+
+      const [productsRes, inquiriesRes, rfqRes, reviewsRes, ordersRes, paymentsRes] = await Promise.all([
         supabase.from('products').select('id, views', { count: 'exact' }).eq('supplier_id', userId),
         supabase.from('inquiries').select('*', { count: 'exact', head: true }).eq('supplier_id', userId),
         supabase.from('rfq_responses').select('*', { count: 'exact', head: true }).eq('supplier_id', userId),
         supabase.from('reviews').select('rating').eq('supplier_id', userId),
+        supabase.from('orders').select('*').eq('supplier_id', userId),
+        supabase.from('payments').select('*').eq('supplier_id', userId),
       ]);
 
       const totalViews = productsRes.data?.reduce((sum, p) => sum + (p.views || 0), 0) || 0;
@@ -77,14 +84,52 @@ export function useSupplierDashboardData(): DashboardData {
       const inquiryCount = inquiriesRes.count || 0;
       const rfqCount = rfqRes.count || 0;
 
-      // Compute trust score from available data
+      // Orders metrics
+      const orders = ordersRes.data || [];
+      const completedOrders = orders.filter(o => o.status === 'completed').length;
+      const pendingOrders = orders.filter(o => o.status === 'pending' || o.status === 'processing').length;
+
+      // Revenue from completed orders
+      const dailyRevenue = orders
+        .filter(o => o.status === 'completed' && o.created_at >= todayStart)
+        .reduce((sum, o) => sum + (Number(o.total_amount) || 0), 0);
+      const weeklyRevenue = orders
+        .filter(o => o.status === 'completed' && o.created_at >= weekStart)
+        .reduce((sum, o) => sum + (Number(o.total_amount) || 0), 0);
+      const monthlyRevenue = orders
+        .filter(o => o.status === 'completed' && o.created_at >= monthStart)
+        .reduce((sum, o) => sum + (Number(o.total_amount) || 0), 0);
+
+      // Payments metrics
+      const payments = paymentsRes.data || [];
+      const receivedPayments = payments
+        .filter(p => p.status === 'received' || p.status === 'paid')
+        .reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
+      const pendingPayments = payments
+        .filter(p => p.status === 'pending')
+        .reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
+      const overduePayments = payments
+        .filter(p => p.status === 'overdue')
+        .reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
+
+      // Delivery & disputes from orders
+      const deliveredOnTime = orders.filter(o => o.delivery_status === 'delivered' && (!o.expected_delivery_date || o.actual_delivery_date! <= o.expected_delivery_date)).length;
+      const delayed = orders.filter(o => o.delivery_status === 'delayed' || (o.delivery_status === 'delivered' && o.expected_delivery_date && o.actual_delivery_date! > o.expected_delivery_date)).length;
+
+      // Buyer insights
+      const uniqueBuyers = [...new Set(orders.map(o => o.buyer_id))];
+      const buyerOrderCounts = uniqueBuyers.map(bid => orders.filter(o => o.buyer_id === bid).length);
+      const repeatBuyers = buyerOrderCounts.filter(c => c > 1).length;
+      const newBuyers = buyerOrderCounts.filter(c => c === 1).length;
+
+      // Compute trust score
       const avgRating = reviewsRes.data?.length
         ? reviewsRes.data.reduce((sum, r) => sum + r.rating, 0) / reviewsRes.data.length
         : 4;
       const trustScore = Math.min(100, Math.round(
-        (avgRating / 5) * 40 + // 40% from reviews
-        Math.min(productCount, 10) * 3 + // 30% from catalog completeness
-        Math.min(rfqCount, 10) * 3 // 30% from responsiveness
+        (avgRating / 5) * 40 +
+        Math.min(productCount, 10) * 3 +
+        Math.min(rfqCount, 10) * 3
       ));
 
       // Build funnel from real data
@@ -92,23 +137,21 @@ export function useSupplierDashboardData(): DashboardData {
         { stage: 'Views', count: totalViews },
         { stage: 'Inquiries', count: inquiryCount },
         { stage: 'Quotes', count: rfqCount },
-        { stage: 'Orders', count: Math.round(rfqCount * 0.5) }, // estimated
-        { stage: 'Paid', count: Math.round(rfqCount * 0.35) }, // estimated
+        { stage: 'Orders', count: orders.length },
+        { stage: 'Paid', count: payments.filter(p => p.status === 'received' || p.status === 'paid').length },
       ];
-
-      // Use funnel data or fall back to demo if no real data
-      const hasFunnelData = totalViews > 0 || inquiryCount > 0;
+      const hasFunnelData = totalViews > 0 || inquiryCount > 0 || orders.length > 0;
 
       setData({
-        revenue: { daily: 0, weekly: 0, monthly: 0 },
-        orders: { completed: 0, pending: 0 },
-        payments: { received: 0, pending: 0, overdue: 0 },
+        revenue: { daily: dailyRevenue, weekly: weeklyRevenue, monthly: monthlyRevenue },
+        orders: { completed: completedOrders, pending: pendingOrders },
+        payments: { received: receivedPayments, pending: pendingPayments, overdue: overduePayments },
         trustScore,
-        revenueTrend: EMPTY_REVENUE_TREND,
+        revenueTrend: EMPTY_REVENUE_TREND, // TODO: aggregate monthly once enough data
         funnel: hasFunnelData ? funnel : EMPTY_FUNNEL,
-        buyerSource: { myBuyers: 0, platformBuyers: 0 },
-        buyerType: { repeat: 0, new: 0 },
-        deliveryDispute: EMPTY_DELIVERY,
+        buyerSource: { myBuyers: 0, platformBuyers: uniqueBuyers.length },
+        buyerType: { repeat: repeatBuyers, new: newBuyers },
+        deliveryDispute: EMPTY_DELIVERY, // TODO: aggregate monthly once enough data
         loading: false,
       });
     };

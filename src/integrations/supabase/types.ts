@@ -203,6 +203,134 @@ export type Database = {
           },
         ]
       }
+      orders: {
+        Row: {
+          actual_delivery_date: string | null
+          buyer_id: string
+          created_at: string
+          delivery_status: string | null
+          expected_delivery_date: string | null
+          id: string
+          notes: string | null
+          order_number: string
+          product_id: string | null
+          quantity: number
+          rfq_id: string | null
+          status: string
+          supplier_id: string
+          total_amount: number
+          unit_price: number
+          updated_at: string
+        }
+        Insert: {
+          actual_delivery_date?: string | null
+          buyer_id: string
+          created_at?: string
+          delivery_status?: string | null
+          expected_delivery_date?: string | null
+          id?: string
+          notes?: string | null
+          order_number?: string
+          product_id?: string | null
+          quantity?: number
+          rfq_id?: string | null
+          status?: string
+          supplier_id: string
+          total_amount?: number
+          unit_price?: number
+          updated_at?: string
+        }
+        Update: {
+          actual_delivery_date?: string | null
+          buyer_id?: string
+          created_at?: string
+          delivery_status?: string | null
+          expected_delivery_date?: string | null
+          id?: string
+          notes?: string | null
+          order_number?: string
+          product_id?: string | null
+          quantity?: number
+          rfq_id?: string | null
+          status?: string
+          supplier_id?: string
+          total_amount?: number
+          unit_price?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_rfq_id_fkey"
+            columns: ["rfq_id"]
+            isOneToOne: false
+            referencedRelation: "rfqs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          buyer_id: string
+          created_at: string
+          due_date: string | null
+          id: string
+          notes: string | null
+          order_id: string
+          paid_at: string | null
+          payment_method: string | null
+          status: string
+          supplier_id: string
+          transaction_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          buyer_id: string
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          notes?: string | null
+          order_id: string
+          paid_at?: string | null
+          payment_method?: string | null
+          status?: string
+          supplier_id: string
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          buyer_id?: string
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          notes?: string | null
+          order_id?: string
+          paid_at?: string | null
+          payment_method?: string | null
+          status?: string
+          supplier_id?: string
+          transaction_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           category_id: string | null
