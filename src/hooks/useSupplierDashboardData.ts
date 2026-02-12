@@ -80,7 +80,7 @@ export function useSupplierDashboardData(): DashboardData {
       ]);
 
       const totalViews = productsRes.data?.reduce((sum, p) => sum + (p.views || 0), 0) || 0;
-      const productCount = productsRes.count || 0;
+      const productCount = productsRes.data?.length || 0;
       const inquiryCount = inquiriesRes.count || 0;
       const rfqCount = rfqRes.count || 0;
 
