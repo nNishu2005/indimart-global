@@ -35,6 +35,7 @@ import ProductLibrary from "./pages/supplier/ProductLibrary";
 import SupplierOrders from "./pages/supplier/Orders";
 import RFQInbox from "./pages/supplier/RFQInbox";
 import VendorOS from "./pages/supplier/VendorOS";
+import GenerateInvoice from "./pages/supplier/GenerateInvoice";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -130,6 +131,11 @@ const App = () => (
           <Route path="/supplier/vendor-os" element={
             <ProtectedRoute allowedRoles={['supplier']}>
               <VendorOS />
+            </ProtectedRoute>
+          } />
+          <Route path="/supplier/generate-invoice" element={
+            <ProtectedRoute allowedRoles={['supplier']}>
+              <GenerateInvoice />
             </ProtectedRoute>
           } />
           

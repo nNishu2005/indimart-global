@@ -30,7 +30,7 @@ const QuickActions = () => {
       label: 'Generate Invoice',
       icon: Receipt,
       description: 'Create & send',
-      onClick: () => toast.info('Invoice generation coming soon'),
+      onClick: () => navigate('/supplier/generate-invoice'),
     },
   ];
 
