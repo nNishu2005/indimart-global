@@ -122,14 +122,19 @@ export function useSupplierDashboardData(): DashboardData {
       const repeatBuyers = buyerOrderCounts.filter(c => c > 1).length;
       const newBuyers = buyerOrderCounts.filter(c => c === 1).length;
 
-      // Compute trust score
+      // Compute trust score – generous baseline for new suppliers
       const avgRating = reviewsRes.data?.length
         ? reviewsRes.data.reduce((sum, r) => sum + r.rating, 0) / reviewsRes.data.length
-        : 4;
+        : 0;
+      const hasProducts = productCount > 0;
+      const hasReviews = (reviewsRes.data?.length || 0) > 0;
       const trustScore = Math.min(100, Math.round(
-        (avgRating / 5) * 40 +
-        Math.min(productCount, 10) * 3 +
-        Math.min(rfqCount, 10) * 3
+        20 + // baseline for being registered
+        (hasProducts ? 15 : 0) + // has at least one product
+        Math.min(productCount, 10) * 2 + // up to 20 for products
+        (hasReviews ? (avgRating / 5) * 25 : 0) + // up to 25 for ratings
+        Math.min(rfqCount, 5) * 2 + // up to 10 for RFQ responses
+        Math.min(completedOrders, 5) * 2 // up to 10 for completed orders
       ));
 
       // Build funnel from real data
