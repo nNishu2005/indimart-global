@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
-import { Plus, Trash2, Printer, Send, ArrowLeft } from 'lucide-react';
+import { Plus, Trash2, Printer, Send, ArrowLeft, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
@@ -41,6 +41,7 @@ const GenerateInvoice = () => {
     company: '',
     address: '',
     email: '',
+    phone: '',
   });
 
   const [items, setItems] = useState<InvoiceItem[]>([
@@ -143,12 +144,20 @@ const GenerateInvoice = () => {
         `}</style>
 
         {/* Action buttons */}
-        <div className="flex gap-3 mb-6 no-print">
+        <div className="flex gap-3 mb-6 no-print flex-wrap">
           <Button onClick={handlePrint} variant="outline" className="gap-2">
             <Printer className="h-4 w-4" /> Print / Download PDF
           </Button>
           <Button onClick={handleSendEmail} disabled={sending} className="gap-2">
             <Send className="h-4 w-4" /> {sending ? 'Sending...' : 'Send to Buyer'}
+          </Button>
+          <Button onClick={() => {
+            const phone = buyerInfo.phone.replace(/\D/g, '');
+            const msg = encodeURIComponent(`📄 *Invoice ${invoiceDetails.invoiceNumber}*\nFrom: ${supplierInfo.companyName}\nTo: ${buyerInfo.name || buyerInfo.company}\nTotal: ₹${total.toLocaleString('en-IN', { maximumFractionDigits: 2 })}\n\nPlease check your email for the full invoice.`);
+            const url = phone ? `https://wa.me/${phone.startsWith('91') ? phone : `91${phone}`}?text=${msg}` : `https://wa.me/?text=${msg}`;
+            window.open(url, '_blank');
+          }} variant="outline" className="gap-2 text-[hsl(142,70%,40%)] border-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,95%)]">
+            <MessageCircle className="h-4 w-4" /> WhatsApp
           </Button>
         </div>
 
@@ -188,6 +197,8 @@ const GenerateInvoice = () => {
                       onChange={(e) => setBuyerInfo({ ...buyerInfo, address: e.target.value })} />
                     <Input placeholder="Email *" type="email" value={buyerInfo.email}
                       onChange={(e) => setBuyerInfo({ ...buyerInfo, email: e.target.value })} />
+                    <Input placeholder="WhatsApp Number" value={buyerInfo.phone}
+                      onChange={(e) => setBuyerInfo({ ...buyerInfo, phone: e.target.value })} />
                   </div>
                 </div>
               </div>
