@@ -18,7 +18,7 @@ const QuickActions = () => {
       label: 'Private Order',
       icon: FileText,
       description: 'Off-platform tracking',
-      onClick: () => toast.info('Private order feature coming soon'),
+      onClick: () => navigate('/supplier/private-order'),
     },
     {
       label: 'Request Advance',
