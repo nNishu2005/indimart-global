@@ -37,6 +37,8 @@ import RFQInbox from "./pages/supplier/RFQInbox";
 import VendorOS from "./pages/supplier/VendorOS";
 import GenerateInvoice from "./pages/supplier/GenerateInvoice";
 import PrivateOrder from "./pages/supplier/PrivateOrder";
+import Quotes from "./pages/Quotes";
+import RequestQuote from "./pages/buyer/RequestQuote";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -90,6 +92,11 @@ const App = () => (
           <Route path="/buyer/create-rfq" element={
             <ProtectedRoute allowedRoles={['buyer']}>
               <CreateRFQ />
+            </ProtectedRoute>
+          } />
+          <Route path="/buyer/request-quote" element={
+            <ProtectedRoute allowedRoles={['buyer']}>
+              <RequestQuote />
             </ProtectedRoute>
           } />
           
@@ -171,6 +178,11 @@ const App = () => (
           <Route path="/messages" element={
             <ProtectedRoute allowedRoles={['buyer', 'supplier', 'admin']}>
               <Messages />
+            </ProtectedRoute>
+          } />
+          <Route path="/quotes" element={
+            <ProtectedRoute allowedRoles={['buyer', 'supplier', 'admin']}>
+              <Quotes />
             </ProtectedRoute>
           } />
           <Route path="/analytics" element={
