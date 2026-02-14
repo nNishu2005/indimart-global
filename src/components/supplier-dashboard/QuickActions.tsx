@@ -15,9 +15,9 @@ const QuickActions = () => {
       onClick: () => toast.info('Invite buyer feature coming soon'),
     },
     {
-      label: 'Private Order',
+      label: 'Custom Quote',
       icon: FileText,
-      description: 'Off-platform tracking',
+      description: 'Send quote to buyer',
       onClick: () => navigate('/supplier/private-order'),
     },
     {

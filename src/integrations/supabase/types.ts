@@ -52,6 +52,60 @@ export type Database = {
           },
         ]
       }
+      custom_quotes: {
+        Row: {
+          created_at: string
+          delivery_date: string | null
+          description: string | null
+          id: string
+          items: Json
+          notes: string | null
+          quantity: number | null
+          quoted_price: number | null
+          requester_id: string
+          responder_id: string
+          status: string
+          target_price: number | null
+          title: string
+          unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          delivery_date?: string | null
+          description?: string | null
+          id?: string
+          items?: Json
+          notes?: string | null
+          quantity?: number | null
+          quoted_price?: number | null
+          requester_id: string
+          responder_id: string
+          status?: string
+          target_price?: number | null
+          title: string
+          unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          delivery_date?: string | null
+          description?: string | null
+          id?: string
+          items?: Json
+          notes?: string | null
+          quantity?: number | null
+          quoted_price?: number | null
+          requester_id?: string
+          responder_id?: string
+          status?: string
+          target_price?: number | null
+          title?: string
+          unit?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       disputes: {
         Row: {
           complainant_id: string

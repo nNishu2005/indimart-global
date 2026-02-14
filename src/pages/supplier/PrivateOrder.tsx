@@ -8,10 +8,11 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Trash2, ArrowLeft, MessageCircle, Copy, Check } from 'lucide-react';
+import { Plus, Trash2, ArrowLeft, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface OrderItem {
   name: string;
@@ -20,21 +21,14 @@ interface OrderItem {
 }
 
 const PrivateOrder = () => {
-  const [copied, setCopied] = useState(false);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [buyers, setBuyers] = useState<{ id: string; company_name: string; full_name: string }[]>([]);
+  const [selectedBuyer, setSelectedBuyer] = useState('');
 
-  const [supplierInfo, setSupplierInfo] = useState({
-    companyName: '',
-    phone: '',
-  });
-
-  const [buyerInfo, setBuyerInfo] = useState({
-    name: '',
-    phone: '',
-    company: '',
-  });
-
-  const [orderDetails, setOrderDetails] = useState({
-    orderRef: `PO-${Date.now().toString(36).toUpperCase()}`,
+  const [quoteDetails, setQuoteDetails] = useState({
+    title: '',
+    description: '',
     deliveryDate: '',
     notes: '',
   });
@@ -44,18 +38,23 @@ const PrivateOrder = () => {
   ]);
 
   useEffect(() => {
-    const loadProfile = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) return;
-      const { data } = await supabase.from('profiles').select('*').eq('id', session.user.id).single();
-      if (data) {
-        setSupplierInfo({
-          companyName: data.company_name || '',
-          phone: data.phone || '',
-        });
+    const loadBuyers = async () => {
+      // Load users who have buyer role
+      const { data } = await supabase
+        .from('user_roles')
+        .select('user_id')
+        .eq('role', 'buyer');
+      
+      if (data && data.length > 0) {
+        const buyerIds = data.map(d => d.user_id);
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('id, company_name, full_name')
+          .in('id', buyerIds);
+        setBuyers(profiles || []);
       }
     };
-    loadProfile();
+    loadBuyers();
   }, []);
 
   const addItem = () => setItems([...items, { name: '', quantity: 1, unitPrice: 0 }]);
@@ -70,53 +69,45 @@ const PrivateOrder = () => {
   const gst = subtotal * 0.18;
   const total = subtotal + gst;
 
-  const buildWhatsAppMessage = () => {
-    const itemLines = items
-      .filter(i => i.name)
-      .map((item, idx) => `${idx + 1}. ${item.name} — Qty: ${item.quantity} × ₹${item.unitPrice.toLocaleString('en-IN')} = ₹${(item.quantity * item.unitPrice).toLocaleString('en-IN')}`)
-      .join('\n');
-
-    return `📦 *Private Order Confirmation*
-━━━━━━━━━━━━━━━━━━
-*Order Ref:* ${orderDetails.orderRef}
-*From:* ${supplierInfo.companyName || 'Supplier'}
-*To:* ${buyerInfo.name || 'Buyer'}${buyerInfo.company ? ` (${buyerInfo.company})` : ''}
-
-📋 *Items:*
-${itemLines || 'No items added'}
-
-💰 *Summary:*
-Subtotal: ₹${subtotal.toLocaleString('en-IN')}
-GST (18%): ₹${gst.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
-*Total: ₹${total.toLocaleString('en-IN', { maximumFractionDigits: 2 })}*
-${orderDetails.deliveryDate ? `\n📅 *Delivery by:* ${orderDetails.deliveryDate}` : ''}
-${orderDetails.notes ? `\n📝 *Notes:* ${orderDetails.notes}` : ''}
-
-━━━━━━━━━━━━━━━━━━
-_Sent via TradeConnect_`;
-  };
-
-  const handleWhatsAppShare = () => {
+  const handleSubmitQuote = async () => {
+    if (!quoteDetails.title.trim()) {
+      toast.error('Quote title is required');
+      return;
+    }
+    if (!selectedBuyer) {
+      toast.error('Please select a buyer');
+      return;
+    }
     if (items.every(i => !i.name)) {
-      toast.error('कम से कम एक item add करें');
+      toast.error('Add at least one item');
       return;
     }
 
-    const phone = buyerInfo.phone.replace(/\D/g, '');
-    const message = encodeURIComponent(buildWhatsAppMessage());
-    const url = phone
-      ? `https://wa.me/${phone.startsWith('91') ? phone : `91${phone}`}?text=${message}`
-      : `https://wa.me/?text=${message}`;
+    setLoading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
 
-    window.open(url, '_blank');
-    toast.success('WhatsApp खुल रहा है...');
-  };
+      const { error } = await supabase.from('custom_quotes').insert({
+        requester_id: user.id,
+        responder_id: selectedBuyer,
+        title: quoteDetails.title,
+        description: quoteDetails.description,
+        items: JSON.parse(JSON.stringify(items.filter(i => i.name))),
+        quoted_price: total,
+        delivery_date: quoteDetails.deliveryDate || null,
+        notes: quoteDetails.notes,
+        status: 'pending',
+      } as any);
 
-  const handleCopyMessage = () => {
-    navigator.clipboard.writeText(buildWhatsAppMessage());
-    setCopied(true);
-    toast.success('Message copied!');
-    setTimeout(() => setCopied(false), 2000);
+      if (error) throw error;
+      toast.success('Quote sent successfully!');
+      navigate('/quotes');
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -128,57 +119,55 @@ _Sent via TradeConnect_`;
             <Link to="/supplier/dashboard"><ArrowLeft className="h-5 w-5" /></Link>
           </Button>
           <div>
-            <h1 className="text-2xl font-bold">Private Order</h1>
-            <p className="text-sm text-muted-foreground">Off-platform order tracking & WhatsApp sharing</p>
+            <h1 className="text-2xl font-bold">Request Custom Quote</h1>
+            <p className="text-sm text-muted-foreground">Create & send a custom quote to a buyer</p>
           </div>
           <Badge variant="secondary" className="ml-auto">
-            <MessageCircle className="h-3 w-3 mr-1" /> WhatsApp Ready
+            <Send className="h-3 w-3 mr-1" /> In-App
           </Badge>
         </div>
 
-        {/* Buyer Info */}
+        {/* Buyer Selection */}
         <Card className="mb-4">
           <CardHeader className="pb-3">
-            <CardTitle className="text-base">Buyer Details</CardTitle>
+            <CardTitle className="text-base">Select Buyer</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div>
-                <Label>Buyer Name</Label>
-                <Input placeholder="Name" value={buyerInfo.name}
-                  onChange={(e) => setBuyerInfo({ ...buyerInfo, name: e.target.value })} />
-              </div>
-              <div>
-                <Label>Company</Label>
-                <Input placeholder="Company name" value={buyerInfo.company}
-                  onChange={(e) => setBuyerInfo({ ...buyerInfo, company: e.target.value })} />
-              </div>
-              <div>
-                <Label>WhatsApp Number</Label>
-                <Input placeholder="91XXXXXXXXXX" value={buyerInfo.phone}
-                  onChange={(e) => setBuyerInfo({ ...buyerInfo, phone: e.target.value })} />
-              </div>
-            </div>
+          <CardContent>
+            <Select value={selectedBuyer} onValueChange={setSelectedBuyer}>
+              <SelectTrigger>
+                <SelectValue placeholder="Choose a buyer..." />
+              </SelectTrigger>
+              <SelectContent>
+                {buyers.map((buyer) => (
+                  <SelectItem key={buyer.id} value={buyer.id}>
+                    {buyer.company_name || buyer.full_name || 'Unknown Buyer'}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </CardContent>
         </Card>
 
-        {/* Order Details */}
+        {/* Quote Details */}
         <Card className="mb-4">
           <CardHeader className="pb-3">
-            <CardTitle className="text-base">Order Details</CardTitle>
+            <CardTitle className="text-base">Quote Details</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 gap-3 mb-3">
-              <div>
-                <Label>Order Reference</Label>
-                <Input value={orderDetails.orderRef}
-                  onChange={(e) => setOrderDetails({ ...orderDetails, orderRef: e.target.value })} />
-              </div>
-              <div>
-                <Label>Expected Delivery</Label>
-                <Input type="date" value={orderDetails.deliveryDate}
-                  onChange={(e) => setOrderDetails({ ...orderDetails, deliveryDate: e.target.value })} />
-              </div>
+          <CardContent className="space-y-3">
+            <div>
+              <Label>Title *</Label>
+              <Input placeholder="e.g. Bulk Steel Rods Order" value={quoteDetails.title}
+                onChange={(e) => setQuoteDetails({ ...quoteDetails, title: e.target.value })} />
+            </div>
+            <div>
+              <Label>Description</Label>
+              <Textarea placeholder="Describe the quote..." value={quoteDetails.description}
+                onChange={(e) => setQuoteDetails({ ...quoteDetails, description: e.target.value })} rows={2} />
+            </div>
+            <div>
+              <Label>Expected Delivery</Label>
+              <Input type="date" value={quoteDetails.deliveryDate}
+                onChange={(e) => setQuoteDetails({ ...quoteDetails, deliveryDate: e.target.value })} />
             </div>
           </CardContent>
         </Card>
@@ -237,19 +226,15 @@ _Sent via TradeConnect_`;
         <Card className="mb-6">
           <CardContent className="pt-6">
             <Label>Notes</Label>
-            <Textarea placeholder="Payment terms, delivery address, etc..." value={orderDetails.notes}
-              onChange={(e) => setOrderDetails({ ...orderDetails, notes: e.target.value })} className="mt-2" rows={3} />
+            <Textarea placeholder="Payment terms, delivery address, etc..." value={quoteDetails.notes}
+              onChange={(e) => setQuoteDetails({ ...quoteDetails, notes: e.target.value })} className="mt-2" rows={3} />
           </CardContent>
         </Card>
 
-        {/* WhatsApp Actions */}
+        {/* Submit */}
         <div className="flex gap-3 mb-8">
-          <Button onClick={handleWhatsAppShare} className="gap-2 flex-1 bg-[hsl(142,70%,40%)] hover:bg-[hsl(142,70%,35%)] text-white">
-            <MessageCircle className="h-4 w-4" /> Share on WhatsApp
-          </Button>
-          <Button onClick={handleCopyMessage} variant="outline" className="gap-2">
-            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            {copied ? 'Copied!' : 'Copy Message'}
+          <Button onClick={handleSubmitQuote} disabled={loading} className="gap-2 flex-1">
+            <Send className="h-4 w-4" /> {loading ? 'Sending...' : 'Send Quote to Buyer'}
           </Button>
         </div>
       </main>
