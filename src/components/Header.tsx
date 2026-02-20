@@ -8,8 +8,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  DropdownMenuTrigger } from
+"@/components/ui/dropdown-menu";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -36,17 +36,17 @@ const Header = () => {
     await supabase.auth.signOut();
     toast({
       title: "Logged out",
-      description: "You have been successfully logged out",
+      description: "You have been successfully logged out"
     });
     navigate("/");
   };
 
   const navLinks = [
-    { name: "Products", href: "/products" },
-    { name: "Categories", href: "/categories" },
-    { name: "How It Works", href: "/how-it-works" },
-    { name: "About", href: "/about" },
-  ];
+  { name: "Products", href: "/products" },
+  { name: "Categories", href: "/categories" },
+  { name: "How It Works", href: "/how-it-works" },
+  { name: "About", href: "/about" }];
+
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -54,26 +54,26 @@ const Header = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
           <Globe className="h-7 w-7 text-secondary" />
-          <span className="text-xl font-bold text-primary">Indimart Global</span>
+          <span className="text-xl font-bold text-primary">​BharatPort </span>
         </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              to={link.href}
-              className="text-sm font-medium text-foreground hover:text-primary transition-colors"
-            >
+          {navLinks.map((link) =>
+          <Link
+            key={link.name}
+            to={link.href}
+            className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+
               {link.name}
             </Link>
-          ))}
+          )}
         </nav>
 
         {/* CTA Buttons */}
         <div className="hidden md:flex items-center space-x-3">
-          {user ? (
-            <>
+          {user ?
+          <>
               <Button variant="ghost" asChild>
                 <Link to="/dashboard" className="flex items-center gap-2">
                   <LayoutDashboard className="h-4 w-4" />
@@ -100,9 +100,9 @@ const Header = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            </>
-          ) : (
-            <>
+            </> :
+
+          <>
               <Button variant="ghost" asChild>
                 <Link to="/login">Sign In</Link>
               </Button>
@@ -110,7 +110,7 @@ const Header = () => {
                 <Link to="/register">Join as Supplier</Link>
               </Button>
             </>
-          )}
+          }
         </div>
 
         {/* Mobile Menu */}
@@ -122,18 +122,18 @@ const Header = () => {
           </SheetTrigger>
           <SheetContent side="right">
             <nav className="flex flex-col space-y-4 mt-6">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  to={link.href}
-                  className="text-lg font-medium text-foreground hover:text-primary transition-colors"
-                >
+              {navLinks.map((link) =>
+              <Link
+                key={link.name}
+                to={link.href}
+                className="text-lg font-medium text-foreground hover:text-primary transition-colors">
+
                   {link.name}
                 </Link>
-              ))}
+              )}
               <div className="pt-4 space-y-2 border-t border-border">
-                {user ? (
-                  <>
+                {user ?
+                <>
                     <Button variant="ghost" className="w-full justify-start" asChild>
                       <Link to="/profile" className="flex items-center">
                         <LayoutDashboard className="mr-2 h-4 w-4" />
@@ -146,17 +146,17 @@ const Header = () => {
                         Profile
                       </Link>
                     </Button>
-                    <Button 
-                      variant="outline" 
-                      className="w-full justify-start" 
-                      onClick={handleLogout}
-                    >
+                    <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    onClick={handleLogout}>
+
                       <LogOut className="mr-2 h-4 w-4" />
                       Logout
                     </Button>
-                  </>
-                ) : (
-                  <>
+                  </> :
+
+                <>
                     <Button variant="ghost" className="w-full" asChild>
                       <Link to="/login">Sign In</Link>
                     </Button>
@@ -164,14 +164,14 @@ const Header = () => {
                       <Link to="/register">Join as Supplier</Link>
                     </Button>
                   </>
-                )}
+                }
               </div>
             </nav>
           </SheetContent>
         </Sheet>
       </div>
-    </header>
-  );
+    </header>);
+
 };
 
 export default Header;
