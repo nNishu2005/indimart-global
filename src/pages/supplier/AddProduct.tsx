@@ -30,6 +30,7 @@ const AddProduct = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [images, setImages] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [variants, setVariants] = useState<Variant[]>([]);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -38,6 +39,14 @@ const AddProduct = () => {
     unit: '',
     category_id: '',
   });
+
+  const addVariant = () => setVariants([...variants, { size: '', color: '', price: '' }]);
+  const removeVariant = (i: number) => setVariants(variants.filter((_, idx) => idx !== i));
+  const updateVariant = (i: number, field: keyof Variant, value: string) => {
+    const updated = [...variants];
+    updated[i] = { ...updated[i], [field]: value };
+    setVariants(updated);
+  };
 
   useEffect(() => {
     loadCategories();
