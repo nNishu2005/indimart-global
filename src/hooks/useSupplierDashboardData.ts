@@ -56,11 +56,12 @@ export function useSupplierDashboardData(): DashboardData {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) {
-        setData((prev) => ({ ...prev, loading: false }));
-        return;
-      }
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session?.user) {
+          setData((prev) => ({ ...prev, loading: false, trustScore: 20 }));
+          return;
+        }
 
       const userId = session.user.id;
 
@@ -159,6 +160,10 @@ export function useSupplierDashboardData(): DashboardData {
         deliveryDispute: EMPTY_DELIVERY, // TODO: aggregate monthly once enough data
         loading: false,
       });
+      } catch (error) {
+        console.error('Dashboard data fetch error:', error);
+        setData((prev) => ({ ...prev, loading: false, trustScore: 20 }));
+      }
     };
 
     fetchData();
