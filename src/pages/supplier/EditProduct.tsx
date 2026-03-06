@@ -398,6 +398,44 @@ const EditProduct = () => {
                 />
               </div>
 
+              {/* Variants */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label>Variants (Size / Color / Price)</Label>
+                  <Button type="button" variant="outline" size="sm" onClick={addVariant}>
+                    <Plus className="h-4 w-4 mr-1" /> Add Variant
+                  </Button>
+                </div>
+                {variants.map((v, i) => (
+                  <div key={i} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-end">
+                    <Input
+                      placeholder="Size (e.g. XL)"
+                      value={v.size}
+                      onChange={(e) => updateVariant(i, 'size', e.target.value)}
+                    />
+                    <Input
+                      placeholder="Color"
+                      value={v.color}
+                      onChange={(e) => updateVariant(i, 'color', e.target.value)}
+                    />
+                    <Input
+                      placeholder="Price (₹)"
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      value={v.price}
+                      onChange={(e) => updateVariant(i, 'price', e.target.value)}
+                    />
+                    <Button type="button" variant="ghost" size="icon" onClick={() => removeVariant(i)}>
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </div>
+                ))}
+                {variants.length === 0 && (
+                  <p className="text-sm text-muted-foreground">No variants added. Click "Add Variant" to create size/color options.</p>
+                )}
+              </div>
+
               <div className="flex gap-3">
                 <Button type="button" variant="outline" onClick={() => navigate('/supplier/products')} className="flex-1">
                   Cancel
