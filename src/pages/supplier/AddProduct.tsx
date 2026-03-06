@@ -17,6 +17,12 @@ interface Category {
   name: string;
 }
 
+interface Variant {
+  size: string;
+  color: string;
+  price: string;
+}
+
 const AddProduct = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
