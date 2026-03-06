@@ -160,7 +160,11 @@ export function useSupplierDashboardData(): DashboardData {
         deliveryDispute: EMPTY_DELIVERY, // TODO: aggregate monthly once enough data
         loading: false,
       });
-    };
+      } catch (error) {
+        console.error('Dashboard data fetch error:', error);
+        // Still show baseline trust score on error
+        setData((prev) => ({ ...prev, loading: false, trustScore: 20 }));
+      }
 
     fetchData();
   }, []);
