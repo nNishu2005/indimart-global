@@ -8,13 +8,19 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, X, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { ArrowLeft, X, Image as ImageIcon, Loader2, Plus, Trash2 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 interface Category {
   id: string;
   name: string;
+}
+
+interface Variant {
+  size: string;
+  color: string;
+  price: string;
 }
 
 const EditProduct = () => {
@@ -28,6 +34,7 @@ const EditProduct = () => {
   const [newImages, setNewImages] = useState<File[]>([]);
   const [newImagePreviews, setNewImagePreviews] = useState<string[]>([]);
   const [imagesToRemove, setImagesToRemove] = useState<string[]>([]);
+  const [variants, setVariants] = useState<Variant[]>([]);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -36,6 +43,14 @@ const EditProduct = () => {
     unit: '',
     category_id: '',
   });
+
+  const addVariant = () => setVariants([...variants, { size: '', color: '', price: '' }]);
+  const removeVariant = (i: number) => setVariants(variants.filter((_, idx) => idx !== i));
+  const updateVariant = (i: number, field: keyof Variant, value: string) => {
+    const updated = [...variants];
+    updated[i] = { ...updated[i], [field]: value };
+    setVariants(updated);
+  };
 
   useEffect(() => {
     loadData();
@@ -62,6 +77,15 @@ const EditProduct = () => {
         category_id: product.category_id || '',
       });
       setExistingImages(product.images || []);
+      // Load variants from specifications
+      const specs = product.specifications as any;
+      if (specs?.variants && Array.isArray(specs.variants)) {
+        setVariants(specs.variants.map((v: any) => ({
+          size: v.size || '',
+          color: v.color || '',
+          price: v.price?.toString() || '',
+        })));
+      }
     } catch (error: any) {
       toast({
         title: 'Error',
@@ -154,6 +178,10 @@ const EditProduct = () => {
         ...newImageUrls
       ];
 
+      const specifications = variants.length > 0
+        ? JSON.parse(JSON.stringify({ variants: variants.filter(v => v.size || v.color || v.price) }))
+        : null;
+
       const { error } = await supabase
         .from('products')
         .update({
@@ -164,6 +192,7 @@ const EditProduct = () => {
           unit: formData.unit.trim() || null,
           category_id: formData.category_id || null,
           images: finalImages.length > 0 ? finalImages : null,
+          specifications,
         })
         .eq('id', id);
 
@@ -367,6 +396,44 @@ const EditProduct = () => {
                   value={formData.moq}
                   onChange={(e) => setFormData({ ...formData, moq: e.target.value })}
                 />
+              </div>
+
+              {/* Variants */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label>Variants (Size / Color / Price)</Label>
+                  <Button type="button" variant="outline" size="sm" onClick={addVariant}>
+                    <Plus className="h-4 w-4 mr-1" /> Add Variant
+                  </Button>
+                </div>
+                {variants.map((v, i) => (
+                  <div key={i} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-end">
+                    <Input
+                      placeholder="Size (e.g. XL)"
+                      value={v.size}
+                      onChange={(e) => updateVariant(i, 'size', e.target.value)}
+                    />
+                    <Input
+                      placeholder="Color"
+                      value={v.color}
+                      onChange={(e) => updateVariant(i, 'color', e.target.value)}
+                    />
+                    <Input
+                      placeholder="Price (₹)"
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      value={v.price}
+                      onChange={(e) => updateVariant(i, 'price', e.target.value)}
+                    />
+                    <Button type="button" variant="ghost" size="icon" onClick={() => removeVariant(i)}>
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </div>
+                ))}
+                {variants.length === 0 && (
+                  <p className="text-sm text-muted-foreground">No variants added. Click "Add Variant" to create size/color options.</p>
+                )}
               </div>
 
               <div className="flex gap-3">
