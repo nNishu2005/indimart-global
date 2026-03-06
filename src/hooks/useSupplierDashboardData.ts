@@ -162,9 +162,9 @@ export function useSupplierDashboardData(): DashboardData {
       });
       } catch (error) {
         console.error('Dashboard data fetch error:', error);
-        // Still show baseline trust score on error
         setData((prev) => ({ ...prev, loading: false, trustScore: 20 }));
       }
+    };
 
     fetchData();
   }, []);
