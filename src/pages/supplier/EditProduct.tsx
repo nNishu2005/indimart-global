@@ -77,6 +77,15 @@ const EditProduct = () => {
         category_id: product.category_id || '',
       });
       setExistingImages(product.images || []);
+      // Load variants from specifications
+      const specs = product.specifications as any;
+      if (specs?.variants && Array.isArray(specs.variants)) {
+        setVariants(specs.variants.map((v: any) => ({
+          size: v.size || '',
+          color: v.color || '',
+          price: v.price?.toString() || '',
+        })));
+      }
     } catch (error: any) {
       toast({
         title: 'Error',
