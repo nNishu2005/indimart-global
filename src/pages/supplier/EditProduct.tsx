@@ -178,6 +178,10 @@ const EditProduct = () => {
         ...newImageUrls
       ];
 
+      const specifications = variants.length > 0
+        ? JSON.parse(JSON.stringify({ variants: variants.filter(v => v.size || v.color || v.price) }))
+        : null;
+
       const { error } = await supabase
         .from('products')
         .update({
@@ -188,6 +192,7 @@ const EditProduct = () => {
           unit: formData.unit.trim() || null,
           category_id: formData.category_id || null,
           images: finalImages.length > 0 ? finalImages : null,
+          specifications,
         })
         .eq('id', id);
 
