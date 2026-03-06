@@ -121,6 +121,10 @@ const AddProduct = () => {
       // Upload images first
       const imageUrls = await uploadImages(user.id);
 
+      const specifications = variants.length > 0
+        ? JSON.parse(JSON.stringify({ variants: variants.filter(v => v.size || v.color || v.price) }))
+        : null;
+
       const { error } = await supabase.from('products').insert({
         supplier_id: user.id,
         name: formData.name.trim(),
@@ -130,6 +134,7 @@ const AddProduct = () => {
         unit: formData.unit.trim() || null,
         category_id: formData.category_id || null,
         images: imageUrls.length > 0 ? imageUrls : null,
+        specifications,
       });
 
       if (error) throw error;
