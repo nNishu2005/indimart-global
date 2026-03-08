@@ -72,6 +72,48 @@ const PrivateOrder = () => {
   const gst = subtotal * 0.18;
   const total = subtotal + gst;
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { toast.error('Not authenticated'); return; }
+
+    setUploadingFiles(true);
+    try {
+      const newFiles: { name: string; path: string; size: number }[] = [];
+      for (const file of Array.from(files)) {
+        if (file.size > 10 * 1024 * 1024) {
+          toast.error(`${file.name} is too large (max 10MB)`);
+          continue;
+        }
+        const filePath = `${user.id}/quotes/${Date.now()}-${file.name}`;
+        const { error } = await supabase.storage.from('business-documents').upload(filePath, file);
+        if (error) { toast.error(`Failed to upload ${file.name}`); continue; }
+        newFiles.push({ name: file.name, path: filePath, size: file.size });
+      }
+      setAttachedFiles(prev => [...prev, ...newFiles]);
+      if (newFiles.length > 0) toast.success(`${newFiles.length} file(s) uploaded`);
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setUploadingFiles(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const removeFile = async (index: number) => {
+    const file = attachedFiles[index];
+    await supabase.storage.from('business-documents').remove([file.path]);
+    setAttachedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
   const handleSubmitQuote = async () => {
     if (!quoteDetails.title.trim()) {
       toast.error('Quote title is required');
