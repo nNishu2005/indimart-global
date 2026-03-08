@@ -133,6 +133,10 @@ const PrivateOrder = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
+      const notesWithFiles = attachedFiles.length > 0
+        ? `${quoteDetails.notes}\n\n📎 Attachments:\n${attachedFiles.map(f => f.path).join('\n')}`
+        : quoteDetails.notes;
+
       const { error } = await supabase.from('custom_quotes').insert({
         requester_id: user.id,
         responder_id: selectedBuyer,
@@ -141,7 +145,7 @@ const PrivateOrder = () => {
         items: JSON.parse(JSON.stringify(items.filter(i => i.name))),
         quoted_price: total,
         delivery_date: quoteDetails.deliveryDate || null,
-        notes: quoteDetails.notes,
+        notes: notesWithFiles,
         status: 'pending',
       } as any);
 
