@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Trash2, ArrowLeft, Send } from 'lucide-react';
+import { Plus, Trash2, ArrowLeft, Send, Paperclip, X, FileText } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { Link, useNavigate } from 'react-router-dom';
@@ -23,6 +23,9 @@ interface OrderItem {
 const PrivateOrder = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [uploadingFiles, setUploadingFiles] = useState(false);
+  const [attachedFiles, setAttachedFiles] = useState<{ name: string; path: string; size: number }[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [buyers, setBuyers] = useState<{ id: string; company_name: string; full_name: string }[]>([]);
   const [selectedBuyer, setSelectedBuyer] = useState('');
 
@@ -69,6 +72,48 @@ const PrivateOrder = () => {
   const gst = subtotal * 0.18;
   const total = subtotal + gst;
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { toast.error('Not authenticated'); return; }
+
+    setUploadingFiles(true);
+    try {
+      const newFiles: { name: string; path: string; size: number }[] = [];
+      for (const file of Array.from(files)) {
+        if (file.size > 10 * 1024 * 1024) {
+          toast.error(`${file.name} is too large (max 10MB)`);
+          continue;
+        }
+        const filePath = `${user.id}/quotes/${Date.now()}-${file.name}`;
+        const { error } = await supabase.storage.from('business-documents').upload(filePath, file);
+        if (error) { toast.error(`Failed to upload ${file.name}`); continue; }
+        newFiles.push({ name: file.name, path: filePath, size: file.size });
+      }
+      setAttachedFiles(prev => [...prev, ...newFiles]);
+      if (newFiles.length > 0) toast.success(`${newFiles.length} file(s) uploaded`);
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setUploadingFiles(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const removeFile = async (index: number) => {
+    const file = attachedFiles[index];
+    await supabase.storage.from('business-documents').remove([file.path]);
+    setAttachedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
   const handleSubmitQuote = async () => {
     if (!quoteDetails.title.trim()) {
       toast.error('Quote title is required');
@@ -88,6 +133,10 @@ const PrivateOrder = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
+      const notesWithFiles = attachedFiles.length > 0
+        ? `${quoteDetails.notes}\n\n📎 Attachments:\n${attachedFiles.map(f => f.path).join('\n')}`
+        : quoteDetails.notes;
+
       const { error } = await supabase.from('custom_quotes').insert({
         requester_id: user.id,
         responder_id: selectedBuyer,
@@ -96,7 +145,7 @@ const PrivateOrder = () => {
         items: JSON.parse(JSON.stringify(items.filter(i => i.name))),
         quoted_price: total,
         delivery_date: quoteDetails.deliveryDate || null,
-        notes: quoteDetails.notes,
+        notes: notesWithFiles,
         status: 'pending',
       } as any);
 
@@ -219,6 +268,49 @@ const PrivateOrder = () => {
                 <span>₹{total.toLocaleString('en-IN', { maximumFractionDigits: 2 })}</span>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Attachments */}
+        <Card className="mb-4">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Attachments</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileUpload}
+              multiple
+              accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.webp"
+              className="hidden"
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploadingFiles}
+              className="gap-2"
+            >
+              <Paperclip className="h-4 w-4" />
+              {uploadingFiles ? 'Uploading...' : 'Attach Files'}
+            </Button>
+            <p className="text-xs text-muted-foreground">PDF, DOC, XLS, JPG, PNG — max 10MB each</p>
+
+            {attachedFiles.length > 0 && (
+              <div className="space-y-2 mt-2">
+                {attachedFiles.map((file, i) => (
+                  <div key={i} className="flex items-center gap-2 rounded-md border p-2 text-sm">
+                    <FileText className="h-4 w-4 text-muted-foreground shrink-0" />
+                    <span className="truncate flex-1">{file.name}</span>
+                    <span className="text-xs text-muted-foreground shrink-0">{formatFileSize(file.size)}</span>
+                    <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0" onClick={() => removeFile(i)}>
+                      <X className="h-3 w-3" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
 
