@@ -267,6 +267,49 @@ const PrivateOrder = () => {
           </CardContent>
         </Card>
 
+        {/* Attachments */}
+        <Card className="mb-4">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Attachments</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileUpload}
+              multiple
+              accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.webp"
+              className="hidden"
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploadingFiles}
+              className="gap-2"
+            >
+              <Paperclip className="h-4 w-4" />
+              {uploadingFiles ? 'Uploading...' : 'Attach Files'}
+            </Button>
+            <p className="text-xs text-muted-foreground">PDF, DOC, XLS, JPG, PNG — max 10MB each</p>
+
+            {attachedFiles.length > 0 && (
+              <div className="space-y-2 mt-2">
+                {attachedFiles.map((file, i) => (
+                  <div key={i} className="flex items-center gap-2 rounded-md border p-2 text-sm">
+                    <FileText className="h-4 w-4 text-muted-foreground shrink-0" />
+                    <span className="truncate flex-1">{file.name}</span>
+                    <span className="text-xs text-muted-foreground shrink-0">{formatFileSize(file.size)}</span>
+                    <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0" onClick={() => removeFile(i)}>
+                      <X className="h-3 w-3" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
         {/* Notes */}
         <Card className="mb-6">
           <CardContent className="pt-6">
