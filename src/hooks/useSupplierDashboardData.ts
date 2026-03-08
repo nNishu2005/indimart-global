@@ -130,12 +130,10 @@ export function useSupplierDashboardData(): DashboardData {
       const hasProducts = productCount > 0;
       const hasReviews = (reviewsRes.data?.length || 0) > 0;
       const trustScore = Math.min(100, Math.round(
-        20 + // baseline for being registered
-        (hasProducts ? 15 : 0) + // has at least one product
-        Math.min(productCount, 10) * 2 + // up to 20 for products
-        (hasReviews ? (avgRating / 5) * 25 : 0) + // up to 25 for ratings
-        Math.min(rfqCount, 5) * 2 + // up to 10 for RFQ responses
-        Math.min(completedOrders, 5) * 2 // up to 10 for completed orders
+        Math.min(productCount, 10) * 3 + // up to 30 for catalog size
+        (hasReviews ? (avgRating / 5) * 30 : 0) + // up to 30 for ratings
+        Math.min(rfqCount, 5) * 4 + // up to 20 for RFQ responses
+        Math.min(completedOrders, 5) * 4 // up to 20 for completed orders
       ));
 
       // Build funnel from real data
