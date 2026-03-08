@@ -23,6 +23,9 @@ interface OrderItem {
 const PrivateOrder = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [uploadingFiles, setUploadingFiles] = useState(false);
+  const [attachedFiles, setAttachedFiles] = useState<{ name: string; path: string; size: number }[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [buyers, setBuyers] = useState<{ id: string; company_name: string; full_name: string }[]>([]);
   const [selectedBuyer, setSelectedBuyer] = useState('');
 
