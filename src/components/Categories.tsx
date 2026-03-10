@@ -10,41 +10,6 @@ const categories = [
     color: "text-blue-600",
     bgColor: "bg-blue-50",
   },
-  {
-    name: "Handicrafts & Jewelry",
-    icon: Gem,
-    count: "850+ Products",
-    color: "text-purple-600",
-    bgColor: "bg-purple-50",
-  },
-  {
-    name: "Machinery & Tools",
-    icon: Wrench,
-    count: "620+ Products",
-    color: "text-gray-600",
-    bgColor: "bg-gray-50",
-  },
-  {
-    name: "Home & Living",
-    icon: Home,
-    count: "940+ Products",
-    color: "text-green-600",
-    bgColor: "bg-green-50",
-  },
-  {
-    name: "Packaging Materials",
-    icon: Package,
-    count: "480+ Products",
-    color: "text-orange-600",
-    bgColor: "bg-orange-50",
-  },
-  {
-    name: "Electronics & Parts",
-    icon: Zap,
-    count: "560+ Products",
-    color: "text-yellow-600",
-    bgColor: "bg-yellow-50",
-  },
 ];
 
 const Categories = () => {
