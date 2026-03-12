@@ -122,13 +122,11 @@ const Products = () => {
 
         setProducts(formattedProducts);
       } else {
-        // Use mock products when no real products exist
-        setProducts(mockProducts);
+        setProducts([]);
       }
     } catch (error) {
       console.error("Error loading products:", error);
-      // Fallback to mock products on error
-      setProducts(mockProducts);
+      setProducts([]);
     } finally {
       setLoading(false);
     }

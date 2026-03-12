@@ -155,24 +155,11 @@ const ProductDetail = () => {
             buyer_name: "Verified Buyer"
           })));
         } else {
-          setReviews(mockReviews);
-        }
-      } else {
-        // Use mock product
-        const mockProduct = mockProducts[id];
-        if (mockProduct) {
-          setProduct(mockProduct);
-          setReviews(mockReviews);
+          setReviews([]);
         }
       }
     } catch (error) {
       console.error("Error loading product:", error);
-      // Try mock data
-      const mockProduct = mockProducts[id];
-      if (mockProduct) {
-        setProduct(mockProduct);
-        setReviews(mockReviews);
-      }
     } finally {
       setLoading(false);
     }
