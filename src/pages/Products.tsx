@@ -51,21 +51,6 @@ const Products = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Mock products for when database is empty
-  const mockProducts: Product[] = [
-    { id: "mock-1", name: "Premium Cotton T-Shirts", category_id: "11111111-1111-1111-1111-111111111111", category_name: "Textiles & Apparel", supplier_id: "s1", supplier_name: "Sunrise Textiles", location: "Mumbai, Maharashtra", moq: 100, unit: "pcs", price: 8.50, is_approved: true, images: ["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400"] },
-    { id: "mock-2", name: "Organic Cotton T-Shirts", category_id: "11111111-1111-1111-1111-111111111111", category_name: "Textiles & Apparel", supplier_id: "s2", supplier_name: "Green Garments", location: "Tirupur, Tamil Nadu", moq: 200, unit: "pcs", price: 12.00, is_approved: true, images: ["https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=400"] },
-    { id: "mock-3", name: "Handcrafted Silver Necklace", category_id: "22222222-2222-2222-2222-222222222222", category_name: "Handicrafts & Jewelry", supplier_id: "s3", supplier_name: "Jaipur Jewels", location: "Jaipur, Rajasthan", moq: 50, unit: "pcs", price: 45.00, is_approved: true, images: ["https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400"] },
-    { id: "mock-4", name: "Gold Plated Earrings Set", category_id: "22222222-2222-2222-2222-222222222222", category_name: "Handicrafts & Jewelry", supplier_id: "s4", supplier_name: "Delhi Designs", location: "Delhi, Delhi", moq: 100, unit: "sets", price: 28.00, is_approved: true, images: ["https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400"] },
-    { id: "mock-5", name: "Industrial CNC Milling Machine", category_id: "33333333-3333-3333-3333-333333333333", category_name: "Machinery & Tools", supplier_id: "s5", supplier_name: "Precision Machines", location: "Pune, Maharashtra", moq: 1, unit: "unit", price: 25000.00, is_approved: true, images: ["https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=400"] },
-    { id: "mock-6", name: "Desktop Laser Engraver", category_id: "33333333-3333-3333-3333-333333333333", category_name: "Machinery & Tools", supplier_id: "s6", supplier_name: "Tech Tools India", location: "Bangalore, Karnataka", moq: 5, unit: "units", price: 1200.00, is_approved: true, images: ["https://images.unsplash.com/photo-1518770660439-4636190af475?w=400"] },
-    { id: "mock-7", name: "Ceramic Table Lamp", category_id: "44444444-4444-4444-4444-444444444444", category_name: "Home & Living", supplier_id: "s7", supplier_name: "Khurja Ceramics", location: "Khurja, Uttar Pradesh", moq: 24, unit: "pcs", price: 35.00, is_approved: true, images: ["https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400"] },
-    { id: "mock-8", name: "Wooden Wall Clock", category_id: "44444444-4444-4444-4444-444444444444", category_name: "Home & Living", supplier_id: "s8", supplier_name: "Saharanpur Woods", location: "Saharanpur, Uttar Pradesh", moq: 50, unit: "pcs", price: 22.00, is_approved: true, images: ["https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=400"] },
-    { id: "mock-9", name: "Custom Printed Boxes", category_id: "55555555-5555-5555-5555-555555555555", category_name: "Packaging Materials", supplier_id: "s9", supplier_name: "PackRight Solutions", location: "Noida, Uttar Pradesh", moq: 500, unit: "pcs", price: 0.85, is_approved: true, images: ["https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400"] },
-    { id: "mock-10", name: "Bluetooth Earbuds Pro", category_id: "66666666-6666-6666-6666-666666666666", category_name: "Electronics & Parts", supplier_id: "s10", supplier_name: "TechSource India", location: "Shenzhen Partnership", moq: 100, unit: "pcs", price: 18.50, is_approved: true, images: ["https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400"] },
-    { id: "mock-11", name: "USB-C Charging Cables", category_id: "66666666-6666-6666-6666-666666666666", category_name: "Electronics & Parts", supplier_id: "s11", supplier_name: "CableWorks", location: "Gurgaon, Haryana", moq: 200, unit: "pcs", price: 2.50, is_approved: true, images: ["https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400"] },
-    { id: "mock-12", name: "Smart LED Bulbs", category_id: "66666666-6666-6666-6666-666666666666", category_name: "Electronics & Parts", supplier_id: "s12", supplier_name: "BrightLife Electronics", location: "Chennai, Tamil Nadu", moq: 100, unit: "pcs", price: 6.00, is_approved: true, images: ["https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?w=400"] },
-  ];
 
   useEffect(() => {
     loadData();
@@ -137,13 +122,11 @@ const Products = () => {
 
         setProducts(formattedProducts);
       } else {
-        // Use mock products when no real products exist
-        setProducts(mockProducts);
+        setProducts([]);
       }
     } catch (error) {
       console.error("Error loading products:", error);
-      // Fallback to mock products on error
-      setProducts(mockProducts);
+      setProducts([]);
     } finally {
       setLoading(false);
     }
