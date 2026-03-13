@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Users, Package, FileText, TrendingUp, Shield, CheckCircle, FileBadge } from 'lucide-react';
+import { Users, Package, FileText, TrendingUp, Shield, CheckCircle, FileBadge, PenLine } from 'lucide-react';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
