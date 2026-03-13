@@ -47,6 +47,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import ApproveProducts from "./pages/admin/ApproveProducts";
 import Disputes from "./pages/admin/Disputes";
 import VerifyDocuments from "./pages/admin/VerifyDocuments";
+import BlogManager from "./pages/admin/BlogManager";
 
 // Shared Pages
 import Messages from "./pages/Messages";
