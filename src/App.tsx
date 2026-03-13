@@ -178,6 +178,11 @@ const App = () => (
               <VerifyDocuments />
             </ProtectedRoute>
           } />
+          <Route path="/admin/blog" element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <BlogManager />
+            </ProtectedRoute>
+          } />
           
           {/* Shared Authenticated Routes */}
           <Route path="/messages" element={

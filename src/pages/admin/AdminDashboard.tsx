@@ -141,6 +141,12 @@ const AdminDashboard = () => {
                     All Suppliers
                   </Link>
                 </Button>
+                <Button asChild variant="outline" className="h-auto py-6 flex-col">
+                  <Link to="/admin/blog">
+                    <PenLine className="h-8 w-8 mb-2" />
+                    Blog Manager
+                  </Link>
+                </Button>
               </CardContent>
             </Card>
           </TabsContent>
