@@ -18,6 +18,8 @@ import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
 import ComparisonDashboard from "./pages/ComparisonDashboard";
 import NotFound from "./pages/NotFound";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 
 // Buyer Pages
 import BuyerDashboard from "./pages/buyer/BuyerDashboard";
