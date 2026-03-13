@@ -18,6 +18,8 @@ import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
 import ComparisonDashboard from "./pages/ComparisonDashboard";
 import NotFound from "./pages/NotFound";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 
 // Buyer Pages
 import BuyerDashboard from "./pages/buyer/BuyerDashboard";
@@ -71,6 +73,8 @@ const App = () => (
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/comparison" element={<ComparisonDashboard />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/suppliers" element={<SupplierList />} />
           <Route path="/supplier/:id" element={<SupplierProfile />} />
           
