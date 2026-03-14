@@ -48,6 +48,8 @@ import ApproveProducts from "./pages/admin/ApproveProducts";
 import Disputes from "./pages/admin/Disputes";
 import VerifyDocuments from "./pages/admin/VerifyDocuments";
 import BlogManager from "./pages/admin/BlogManager";
+import UserManagement from "./pages/admin/UserManagement";
+import TransactionAnalytics from "./pages/admin/TransactionAnalytics";
 
 // Shared Pages
 import Messages from "./pages/Messages";
