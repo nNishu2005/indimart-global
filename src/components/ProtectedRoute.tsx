@@ -26,10 +26,9 @@ export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) 
       const { data } = await supabase
         .from('user_roles')
         .select('role')
-        .eq('user_id', session.user.id)
-        .single();
+        .eq('user_id', session.user.id);
 
-      if (data && allowedRoles.includes(data.role as UserRole)) {
+      if (data && data.some(r => allowedRoles.includes(r.role as UserRole))) {
         setAuthorized(true);
       } else {
         setAuthorized(false);
