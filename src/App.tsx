@@ -185,6 +185,16 @@ const App = () => (
               <BlogManager />
             </ProtectedRoute>
           } />
+          <Route path="/admin/users" element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <UserManagement />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/transactions" element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <TransactionAnalytics />
+            </ProtectedRoute>
+          } />
           
           {/* Shared Authenticated Routes */}
           <Route path="/messages" element={
