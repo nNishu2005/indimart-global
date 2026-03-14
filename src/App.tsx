@@ -48,6 +48,8 @@ import ApproveProducts from "./pages/admin/ApproveProducts";
 import Disputes from "./pages/admin/Disputes";
 import VerifyDocuments from "./pages/admin/VerifyDocuments";
 import BlogManager from "./pages/admin/BlogManager";
+import UserManagement from "./pages/admin/UserManagement";
+import TransactionAnalytics from "./pages/admin/TransactionAnalytics";
 
 // Shared Pages
 import Messages from "./pages/Messages";
@@ -181,6 +183,16 @@ const App = () => (
           <Route path="/admin/blog" element={
             <ProtectedRoute allowedRoles={['admin']}>
               <BlogManager />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/users" element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <UserManagement />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/transactions" element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <TransactionAnalytics />
             </ProtectedRoute>
           } />
           
