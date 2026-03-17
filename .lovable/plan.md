@@ -1,108 +1,42 @@
 
-# Security Fix Plan: Restrict Profile PII and Remove Public Supplier Roles Policy
 
-## Overview
-This plan addresses two error-level security vulnerabilities:
-1. **Customer Personal Information Exposed** - The `profiles` table currently exposes sensitive fields (email, phone, PAN, GST) to all authenticated users viewing supplier profiles
-2. **User Identity Information Leaked** - The `user_roles` table has a policy "Anyone can view supplier roles" that exposes user IDs and role associations publicly
+## Analysis
 
-## Current Security Issues
+The screenshot shows a login failure with "Invalid login credentials" for `testsupplier-feb01@test.com`. The auth logs confirm a `refresh_token_not_found` error, suggesting the session has expired or the password is incorrect.
 
-### Issue 1: Profiles Table PII Exposure
-- Current RLS policy "Authenticated users can view verified supplier profiles" allows any authenticated user to access ALL columns including `email`, `phone`, `pan_number`, and `gst_number`
-- The `SupplierProfile.tsx` page explicitly displays email, phone, and GST number in the "Contact Info" tab
-- The `SupplierList.tsx` uses `select('*')` fetching all sensitive fields even though only a few are displayed
+The admin role IS correctly assigned in the database for both accounts:
+- `24ed4080...` (supplier + admin)
+- `9985709a...` (supplier + admin)
 
-### Issue 2: User Roles Public Exposure
-- Current policy "Anyone can view supplier roles" allows unauthenticated access to `user_roles` table
-- This leaks user IDs and their associated roles, which is unnecessary exposure
+The problem is the **login credentials are wrong** -- the password doesn't match what's stored in auth.
 
-## Solution Approach
+## Plan
 
-### Database Changes (Migration)
+### 1. Fix login access via password reset
+Since we can't read or set passwords directly, the simplest fix is to use the **Forgot Password** flow:
+- Go to `/forgot-password`, enter `testsupplier-feb01@test.com`
+- Check email for reset link, set a new password
+- Login with the new password
 
-**1. Replace the profiles viewing policy with a more restrictive one:**
-- Drop the current "Authenticated users can view verified supplier profiles" policy
-- Create a new policy that only allows viewing non-sensitive columns for verified suppliers
-- Use a database view or function to expose only safe fields
+### 2. Improve verification badge logic (both documents + admin approval required)
+Currently `is_verified` on profiles is a simple toggle. Per your choice, verification should require:
+- All uploaded documents approved (`documents.is_verified = true`)
+- Explicit admin approval step
 
-**2. Restrict user_roles access:**
-- Drop the "Anyone can view supplier roles" policy
-- Create a new policy requiring authentication to view supplier roles
+**Changes:**
+- Update `VerifyDocuments.tsx`: When admin verifies all documents for a user, show a "Grant Verified Badge" button
+- Update `UserManagement.tsx`: Only allow toggling verified badge if the user has at least one verified document. Show document status alongside the badge toggle
+- Add a helper query to check document verification status before allowing badge
 
-### Code Changes
+### 3. Keep admin as single fixed account
+No changes needed -- admin roles are already manually assigned via database. No self-service admin creation will be added. The `assign_user_role` trigger only allows `buyer` or `supplier` roles, which is correct.
 
-**1. Update `src/pages/buyer/SupplierList.tsx`:**
-- Change `select('*')` to select only non-sensitive fields: `id, company_name, city, state, country, company_description, is_verified, avatar_url`
+### 4. Minor security improvements
+- Restrict RLS policies from `public` role to `authenticated` role on sensitive tables (the linter flagged 15+ tables with anonymous access policies)
+- This is a migration to update existing policies with `TO authenticated` instead of `TO public`
 
-**2. Update `src/pages/buyer/SupplierProfile.tsx`:**
-- Change `select('*')` to select only non-sensitive fields
-- Remove or hide the Contact Info tab that displays email, phone, and GST number
-- Replace with a "Request Contact Info" button that uses the messaging system
+## Summary of file changes
+- **`src/pages/admin/UserManagement.tsx`**: Add document verification status check before badge toggle
+- **`src/pages/admin/VerifyDocuments.tsx`**: Add "Grant Verified Badge" action when all docs verified
+- **Database migration**: Update RLS policies to use `authenticated` role instead of `public`
 
-**3. Update `src/pages/Products.tsx`:**
-- Already correctly selects only `id, company_name, city, state` - no changes needed
-
-**4. Update `src/pages/ProductDetail.tsx`:**
-- Already correctly selects only `company_name, city, state, is_verified` - no changes needed
-
-## Technical Details
-
-### Migration SQL
-
-```sql
--- Fix 1: Remove public access to user_roles for suppliers
-DROP POLICY IF EXISTS "Anyone can view supplier roles" ON public.user_roles;
-
--- Create a policy that requires authentication to view supplier roles
-CREATE POLICY "Authenticated users can view supplier roles"
-ON public.user_roles
-FOR SELECT
-USING (
-  auth.uid() IS NOT NULL
-  AND role = 'supplier'::app_role
-);
-
--- Fix 2: Restrict profiles viewing to only non-sensitive fields
--- Drop the current policy that exposes all columns
-DROP POLICY IF EXISTS "Authenticated users can view verified supplier profiles" ON public.profiles;
-
--- Create a database view for safe profile data
-CREATE OR REPLACE VIEW public.supplier_profiles_public AS
-SELECT 
-  id,
-  company_name,
-  company_description,
-  avatar_url,
-  city,
-  state,
-  country,
-  is_verified,
-  created_at
-FROM public.profiles
-WHERE is_verified = true
-AND EXISTS (
-  SELECT 1 FROM public.user_roles
-  WHERE user_roles.user_id = profiles.id
-  AND user_roles.role = 'supplier'::app_role
-);
-
--- Grant access to the view
-GRANT SELECT ON public.supplier_profiles_public TO authenticated;
-GRANT SELECT ON public.supplier_profiles_public TO anon;
-```
-
-### File Changes Summary
-
-| File | Change |
-|------|--------|
-| `src/pages/buyer/SupplierList.tsx` | Replace `select('*')` with explicit safe fields |
-| `src/pages/buyer/SupplierProfile.tsx` | Replace `select('*')` with safe fields, modify Contact tab to hide PII |
-
-## Outcome
-
-After implementation:
-- Sensitive fields (email, phone, PAN, GST) will only be accessible by the profile owner or admins
-- User roles will only be visible to authenticated users
-- Buyer-facing pages will show only business information (company name, location, verification status)
-- Contact between buyers and suppliers will be through the existing messaging system
