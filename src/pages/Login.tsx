@@ -9,25 +9,25 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
+const getDashboardPath = async (userId: string) => {
+  const { data: roles } = await supabase
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', userId);
+
+  const userRoles = roles?.map(({ role }) => role) ?? [];
+
+  if (userRoles.includes('admin')) return '/admin/dashboard';
+  if (userRoles.includes('supplier')) return '/supplier/dashboard';
+  return '/buyer/dashboard';
+};
+
 const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const getDashboardPath = async (userId: string) => {
-    const { data: roles } = await supabase
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', userId);
-
-    const userRoles = roles?.map(({ role }) => role) ?? [];
-
-    if (userRoles.includes('admin')) return '/admin/dashboard';
-    if (userRoles.includes('supplier')) return '/supplier/dashboard';
-    return '/buyer/dashboard';
-  };
 
   // Redirect if already logged in
   useEffect(() => {
