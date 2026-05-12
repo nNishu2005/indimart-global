@@ -16,21 +16,25 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const getDashboardPath = async (userId: string) => {
+    const { data: roles } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', userId);
+
+    const userRoles = roles?.map(({ role }) => role) ?? [];
+
+    if (userRoles.includes('admin')) return '/admin/dashboard';
+    if (userRoles.includes('supplier')) return '/supplier/dashboard';
+    return '/buyer/dashboard';
+  };
+
   // Redirect if already logged in
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        const { data: roleData } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', session.user.id)
-          .maybeSingle();
-
-        const userRole = roleData?.role || 'buyer';
-        const dashboardPath = userRole === 'admin' ? '/admin/dashboard' : 
-                             userRole === 'supplier' ? '/supplier/dashboard' : 
-                             '/buyer/dashboard';
+        const dashboardPath = await getDashboardPath(session.user.id);
         navigate(dashboardPath);
       }
     };
@@ -51,23 +55,13 @@ const Login = () => {
 
       // Fetch user role to redirect to appropriate dashboard
       if (data.session?.user) {
-        const { data: roleData } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', data.session.user.id)
-          .maybeSingle();
-
-        const userRole = roleData?.role || 'buyer';
+        const dashboardPath = await getDashboardPath(data.session.user.id);
 
         toast({
           title: "Success",
           description: "Logged in successfully",
         });
 
-        // Navigate based on role
-        const dashboardPath = userRole === 'admin' ? '/admin/dashboard' : 
-                             userRole === 'supplier' ? '/supplier/dashboard' : 
-                             '/buyer/dashboard';
         navigate(dashboardPath);
       }
     } catch (error: any) {
