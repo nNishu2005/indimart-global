@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { Calendar, ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
+import DOMPurify from "dompurify";
 
 interface BlogPostData {
   id: string;
@@ -96,7 +97,7 @@ const BlogPost = () => {
                 className="prose prose-lg max-w-none text-foreground
                   prose-headings:text-foreground prose-p:text-muted-foreground
                   prose-a:text-primary prose-strong:text-foreground"
-                dangerouslySetInnerHTML={{ __html: post.content }}
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
               />
             </article>
           )}
