@@ -764,8 +764,6 @@ const Profile = () => {
                       </p>
                     </div>
                   </TabsContent>
-                  </>
-                  )}
                 </Tabs>
 
                 {/* Save Button */}
