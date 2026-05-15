@@ -616,6 +616,9 @@ const Profile = () => {
                       </div>
                     )}
                   </TabsContent>
+                  </>
+                  )}
+
 
                   {/* Documents Tab */}
                   <TabsContent value="documents" className="space-y-6">
