@@ -467,23 +467,21 @@ const Profile = () => {
             <Card className="p-6 md:p-8">
               <form onSubmit={handleUpdateProfile}>
                 <Tabs defaultValue="personal" className="w-full">
-                  <TabsList className={`grid w-full ${role === 'buyer' ? 'grid-cols-1' : 'grid-cols-3'} mb-6`}>
+                  <TabsList className={`grid w-full ${role === 'buyer' ? 'grid-cols-2' : 'grid-cols-3'} mb-6`}>
                     <TabsTrigger value="personal" className="flex items-center gap-2">
                       <UserIcon className="h-4 w-4" />
                       <span className="hidden sm:inline">Personal</span>
                     </TabsTrigger>
                     {role !== 'buyer' && (
-                      <>
-                        <TabsTrigger value="company" className="flex items-center gap-2">
-                          <Building2 className="h-4 w-4" />
-                          <span className="hidden sm:inline">Company</span>
-                        </TabsTrigger>
-                        <TabsTrigger value="documents" className="flex items-center gap-2">
-                          <FileText className="h-4 w-4" />
-                          <span className="hidden sm:inline">Documents</span>
-                        </TabsTrigger>
-                      </>
+                      <TabsTrigger value="company" className="flex items-center gap-2">
+                        <Building2 className="h-4 w-4" />
+                        <span className="hidden sm:inline">Company</span>
+                      </TabsTrigger>
                     )}
+                    <TabsTrigger value="documents" className="flex items-center gap-2">
+                      <FileText className="h-4 w-4" />
+                      <span className="hidden sm:inline">Documents</span>
+                    </TabsTrigger>
                   </TabsList>
 
                   {/* Personal Info Tab */}
@@ -618,6 +616,9 @@ const Profile = () => {
                       </div>
                     )}
                   </TabsContent>
+                  </>
+                  )}
+
 
                   {/* Documents Tab */}
                   <TabsContent value="documents" className="space-y-6">
@@ -763,8 +764,6 @@ const Profile = () => {
                       </p>
                     </div>
                   </TabsContent>
-                  </>
-                  )}
                 </Tabs>
 
                 {/* Save Button */}
