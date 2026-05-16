@@ -91,7 +91,7 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-center space-x-2 text-sm text-primary-foreground/80">
                 <Mail className="h-4 w-4 text-secondary" />
-                <span>support@indimartglobal.com</span>
+                <span>support@tradevithika.com</span>
               </li>
               <li className="flex items-center space-x-2 text-sm text-primary-foreground/80">
                 <Phone className="h-4 w-4 text-secondary" />
