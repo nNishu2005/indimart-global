@@ -67,7 +67,7 @@ const About = () => {
               </p>
               <Card className="p-8 bg-gradient-to-br from-primary/10 to-secondary/10">
                 <p className="text-lg leading-relaxed">
-                  Founded in 2020, Indimart Global has grown to become one of the leading 
+                  Founded in 2026, Tradevithika has grown to become one of the leading 
                   B2B marketplaces, facilitating billions in trade value annually. We believe 
                   in making global trade accessible to everyone, from small businesses to 
                   large enterprises, by providing the tools, connections, and support needed 
