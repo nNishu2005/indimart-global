@@ -250,6 +250,11 @@ const Products = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEO
+        title="Browse Textiles & Apparel Products | Tradevithika"
+        description="Discover thousands of verified Indian textile and apparel products — fabrics, garments, and home textiles from trusted manufacturers."
+        path="/products"
+      />
       <Header />
       
       <main className="flex-1 bg-muted/30">
