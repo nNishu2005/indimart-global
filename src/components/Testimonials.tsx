@@ -20,7 +20,7 @@ const testimonials = [
     name: "Michael Chen",
     role: "Procurement Head, USA",
     company: "TechParts America",
-    content: "Finding verified Indian manufacturers was always challenging. Indimart Global solved that problem with their detailed supplier profiles.",
+    content: "Finding verified Indian manufacturers was always challenging. Tradevithika solved that problem with their detailed supplier profiles.",
     rating: 5,
   },
 ];
