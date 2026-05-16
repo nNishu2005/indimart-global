@@ -10,7 +10,7 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center space-x-2 mb-4">
               <Globe className="h-6 w-6 text-secondary" />
-              <span className="text-xl font-bold">Indimart Global</span>
+              <span className="text-xl font-bold">Tradevithika</span>
             </div>
             <p className="text-sm text-primary-foreground/80 mb-4">
               India's premier B2B export marketplace connecting verified manufacturers with global buyers.
@@ -91,7 +91,7 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-center space-x-2 text-sm text-primary-foreground/80">
                 <Mail className="h-4 w-4 text-secondary" />
-                <span>support@indimartglobal.com</span>
+                <span>support@tradevithika.com</span>
               </li>
               <li className="flex items-center space-x-2 text-sm text-primary-foreground/80">
                 <Phone className="h-4 w-4 text-secondary" />
@@ -105,7 +105,7 @@ const Footer = () => {
         <div className="border-t border-primary-foreground/20 pt-8 mt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-sm text-primary-foreground/80">
-              © 2024 Indimart Global. All rights reserved.
+              © 2026 Tradevithika. All rights reserved.
             </p>
             <div className="flex space-x-6">
               <Link to="/privacy" className="text-sm text-primary-foreground/80 hover:text-secondary transition-colors">

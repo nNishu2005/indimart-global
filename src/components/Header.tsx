@@ -55,7 +55,7 @@ const Header = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
           <Globe className="h-7 w-7 text-secondary" />
-          <span className="text-xl font-bold text-primary">​BharatPort </span>
+          <span className="text-xl font-bold text-primary">Tradevithika</span>
         </Link>
 
         {/* Desktop Navigation */}

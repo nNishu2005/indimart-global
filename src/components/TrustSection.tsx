@@ -33,7 +33,7 @@ const TrustSection = () => {
             <span className="text-sm font-semibold text-secondary">Trusted by Global Buyers</span>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-            Why Choose Indimart Global?
+            Why Choose Tradevithika?
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             We ensure safe, reliable, and efficient trade connections between Indian manufacturers and international buyers

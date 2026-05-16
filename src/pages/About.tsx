@@ -45,7 +45,7 @@ const About = () => {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                About Indimart Global
+                About Tradevithika
               </h1>
               <p className="text-lg text-muted-foreground">
                 Your trusted partner in global B2B trade
@@ -60,14 +60,14 @@ const About = () => {
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold mb-6 text-center">Our Mission</h2>
               <p className="text-lg text-muted-foreground text-center mb-8">
-                At Indimart Global, we're revolutionizing international trade by creating 
+                At Tradevithika, we're revolutionizing international trade by creating 
                 a transparent, efficient, and secure marketplace that connects businesses 
                 worldwide. Our mission is to empower businesses of all sizes to access 
                 global markets and grow beyond borders.
               </p>
               <Card className="p-8 bg-gradient-to-br from-primary/10 to-secondary/10">
                 <p className="text-lg leading-relaxed">
-                  Founded in 2020, Indimart Global has grown to become one of the leading 
+                  Founded in 2026, Tradevithika has grown to become one of the leading 
                   B2B marketplaces, facilitating billions in trade value annually. We believe 
                   in making global trade accessible to everyone, from small businesses to 
                   large enterprises, by providing the tools, connections, and support needed 
@@ -138,7 +138,7 @@ const About = () => {
               <h2 className="text-3xl font-bold mb-4">Join Our Growing Community</h2>
               <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
                 Whether you're looking to source products or expand your market reach, 
-                Indimart Global is here to support your journey.
+                Tradevithika is here to support your journey.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" asChild>

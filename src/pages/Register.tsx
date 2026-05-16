@@ -151,7 +151,7 @@ const Register = () => {
         <div className="container mx-auto px-4">
           <Card className="max-w-2xl mx-auto p-8">
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold mb-2">Join Indimart Global</h1>
+              <h1 className="text-3xl font-bold mb-2">Join Tradevithika</h1>
               <p className="text-muted-foreground">
                 Create your account and start trading globally
               </p>

@@ -6,21 +6,21 @@ const testimonials = [
     name: "Sarah Mitchell",
     role: "Purchasing Manager, UK",
     company: "Global Imports Ltd",
-    content: "Indimart Global connected us with reliable textile suppliers in India. The quality and pricing exceeded our expectations. Highly recommend!",
+    content: "Tradevithika connected us with reliable textile suppliers in India. The quality and pricing exceeded our expectations. Highly recommend!",
     rating: 5,
   },
   {
     name: "Rajesh Kumar",
     role: "Export Director",
     company: "Heritage Handicrafts",
-    content: "Since joining Indimart Global, we've expanded to 15 new countries. The platform made it easy to reach genuine international buyers.",
+    content: "Since joining Tradevithika, we've expanded to 15 new countries. The platform made it easy to reach genuine international buyers.",
     rating: 5,
   },
   {
     name: "Michael Chen",
     role: "Procurement Head, USA",
     company: "TechParts America",
-    content: "Finding verified Indian manufacturers was always challenging. Indimart Global solved that problem with their detailed supplier profiles.",
+    content: "Finding verified Indian manufacturers was always challenging. Tradevithika solved that problem with their detailed supplier profiles.",
     rating: 5,
   },
 ];
@@ -34,7 +34,7 @@ const Testimonials = () => {
             Trusted by Thousands
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            See what buyers and suppliers say about their experience with Indimart Global
+            See what buyers and suppliers say about their experience with Tradevithika
           </p>
         </div>
 
