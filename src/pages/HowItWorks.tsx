@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Search, MessageSquare, ShoppingCart, TrendingUp } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const HowItWorks = () => {
   const steps = [
