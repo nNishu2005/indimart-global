@@ -138,7 +138,7 @@ const About = () => {
               <h2 className="text-3xl font-bold mb-4">Join Our Growing Community</h2>
               <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
                 Whether you're looking to source products or expand your market reach, 
-                Indimart Global is here to support your journey.
+                Tradevithika is here to support your journey.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" asChild>
