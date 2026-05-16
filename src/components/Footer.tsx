@@ -10,7 +10,7 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center space-x-2 mb-4">
               <Globe className="h-6 w-6 text-secondary" />
-              <span className="text-xl font-bold">Indimart Global</span>
+              <span className="text-xl font-bold">Tradevithika</span>
             </div>
             <p className="text-sm text-primary-foreground/80 mb-4">
               India's premier B2B export marketplace connecting verified manufacturers with global buyers.
