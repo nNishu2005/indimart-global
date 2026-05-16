@@ -60,7 +60,7 @@ const About = () => {
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-bold mb-6 text-center">Our Mission</h2>
               <p className="text-lg text-muted-foreground text-center mb-8">
-                At Indimart Global, we're revolutionizing international trade by creating 
+                At Tradevithika, we're revolutionizing international trade by creating 
                 a transparent, efficient, and secure marketplace that connects businesses 
                 worldwide. Our mission is to empower businesses of all sizes to access 
                 global markets and grow beyond borders.
