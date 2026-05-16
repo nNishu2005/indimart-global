@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { Search, MapPin, CheckCircle, Building2, Package, Star } from 'lucide-react';
+import SEO from '@/components/SEO';
 
 interface Supplier {
   id: string;
