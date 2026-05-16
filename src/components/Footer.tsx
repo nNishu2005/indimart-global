@@ -10,7 +10,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center space-x-2 mb-4">
-              <Globe className="h-6 w-6 text-secondary" />
+              <img src={logo} alt="Tradevithika logo" className="h-8 w-8 object-contain bg-white rounded p-0.5" />
               <span className="text-xl font-bold">Tradevithika</span>
             </div>
             <p className="text-sm text-primary-foreground/80 mb-4">
