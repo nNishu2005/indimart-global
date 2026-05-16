@@ -36,6 +36,11 @@ const HowItWorks = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEO
+        title="How Tradevithika Works — Source Indian Textiles in 4 Steps"
+        description="Search verified Indian textile and apparel suppliers, connect, negotiate, and place secure orders. See how Tradevithika simplifies B2B sourcing."
+        path="/how-it-works"
+      />
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
