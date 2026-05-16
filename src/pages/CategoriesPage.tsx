@@ -2,10 +2,16 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Categories from "@/components/Categories";
 import { Card } from "@/components/ui/card";
+import SEO from "@/components/SEO";
 
 const CategoriesPage = () => {
   return (
     <div className="min-h-screen flex flex-col">
+      <SEO
+        title="Textiles & Apparel Categories | Tradevithika"
+        description="Browse Indian textiles and apparel categories — fabrics, garments, home textiles, and more. Find verified suppliers for every product line."
+        path="/categories"
+      />
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
