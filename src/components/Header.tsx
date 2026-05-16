@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
-import { Globe, Menu, User, LogOut, LayoutDashboard } from "lucide-react";
+import { Menu, User, LogOut, LayoutDashboard } from "lucide-react";
+import logo from "@/assets/tradevithika-logo.png";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   DropdownMenu,
@@ -54,7 +55,7 @@ const Header = () => {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
-          <Globe className="h-7 w-7 text-secondary" />
+          <img src={logo} alt="Tradevithika logo" className="h-9 w-9 object-contain" />
           <span className="text-xl font-bold text-primary">Tradevithika</span>
         </Link>
 
