@@ -97,6 +97,11 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEO
+        title="Sign In | Tradevithika"
+        description="Sign in to your Tradevithika buyer, supplier, or admin account to manage RFQs, orders, and conversations."
+        path="/login"
+      />
       <Header />
       <main className="flex-1 flex items-center justify-center py-16 bg-muted/30">
         <div className="container mx-auto px-4">
