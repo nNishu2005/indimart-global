@@ -43,13 +43,18 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEO
+        title="Tradevithika Blog — Indian Textile Export Insights"
+        description="Export tips, trade compliance guides, sourcing playbooks, and success stories for Indian textile and apparel MSMEs."
+        path="/blog"
+      />
       <Header />
       <main className="flex-1">
         {/* Hero */}
         <section className="bg-primary py-16 md:py-20">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-3xl md:text-5xl font-bold text-primary-foreground mb-4">
-              BharatPort Blog
+              Tradevithika Blog
             </h1>
             <p className="text-primary-foreground/80 text-lg max-w-2xl mx-auto">
               Export tips, trade insights, and success stories for Indian MSMEs
