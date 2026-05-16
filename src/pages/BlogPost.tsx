@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Calendar, ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
 import DOMPurify from "dompurify";
+import SEO from "@/components/SEO";
 
 interface BlogPostData {
   id: string;
