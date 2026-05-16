@@ -103,7 +103,7 @@ const Login = () => {
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
               <p className="text-muted-foreground">
-                Sign in to your Indimart Global account
+                Sign in to your Tradevithika account
               </p>
             </div>
 
