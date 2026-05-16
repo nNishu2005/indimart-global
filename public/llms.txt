@@ -1,0 +1,20 @@
+# Tradevithika
+
+> India's B2B textiles and apparel export marketplace connecting verified Indian manufacturers with global buyers. Source fabrics, garments, and home textiles with trust and transparency.
+
+Tradevithika focuses exclusively on the textiles and apparel sector, offering verified supplier profiles, RFQs, custom quotes, secure messaging, and an export toolkit (Incoterms, HS codes, cost calculator, compliance).
+
+## Pages
+
+- [Home](/): Platform overview and featured categories.
+- [Products](/products): Browse textiles and apparel from verified Indian suppliers.
+- [Categories](/categories): Product categories across fabrics, garments, and home textiles.
+- [Suppliers](/suppliers): Directory of verified Indian textile and apparel manufacturers.
+- [How It Works](/how-it-works): Step-by-step guide for buyers and suppliers.
+- [About](/about): About Tradevithika.
+- [Blog](/blog): Articles on Indian textile exports, trade compliance, and sourcing.
+
+## Optional
+
+- [Sign In](/login): Buyer, supplier, and admin login.
+- [Register](/register): Create a buyer or supplier account.
