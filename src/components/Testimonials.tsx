@@ -34,7 +34,7 @@ const Testimonials = () => {
             Trusted by Thousands
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            See what buyers and suppliers say about their experience with Indimart Global
+            See what buyers and suppliers say about their experience with Tradevithika
           </p>
         </div>
 
