@@ -147,6 +147,11 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEO
+        title="Join Tradevithika — Register as Buyer or Supplier"
+        description="Create your free Tradevithika account to source verified Indian textile and apparel suppliers, or list your products to reach global buyers."
+        path="/register"
+      />
       <Header />
       <main className="flex-1 flex items-center justify-center py-16 bg-muted/30">
         <div className="container mx-auto px-4">
