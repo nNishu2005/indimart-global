@@ -6,7 +6,7 @@ const testimonials = [
     name: "Sarah Mitchell",
     role: "Purchasing Manager, UK",
     company: "Global Imports Ltd",
-    content: "Indimart Global connected us with reliable textile suppliers in India. The quality and pricing exceeded our expectations. Highly recommend!",
+    content: "Tradevithika connected us with reliable textile suppliers in India. The quality and pricing exceeded our expectations. Highly recommend!",
     rating: 5,
   },
   {
