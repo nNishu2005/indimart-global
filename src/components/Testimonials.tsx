@@ -13,7 +13,7 @@ const testimonials = [
     name: "Rajesh Kumar",
     role: "Export Director",
     company: "Heritage Handicrafts",
-    content: "Since joining Indimart Global, we've expanded to 15 new countries. The platform made it easy to reach genuine international buyers.",
+    content: "Since joining Tradevithika, we've expanded to 15 new countries. The platform made it easy to reach genuine international buyers.",
     rating: 5,
   },
   {
