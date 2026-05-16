@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { Search, MapPin, CheckCircle, Building2, Package, Star } from 'lucide-react';
+import SEO from '@/components/SEO';
 
 interface Supplier {
   id: string;
@@ -104,6 +105,11 @@ const SupplierList = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEO
+        title="Verified Indian Textile & Apparel Suppliers | Tradevithika"
+        description="Browse verified Indian manufacturers and exporters of textiles, apparel, and home textiles. Filter by location and capability to find your match."
+        path="/suppliers"
+      />
       <Header />
       
       <main className="flex-1 bg-muted/30">

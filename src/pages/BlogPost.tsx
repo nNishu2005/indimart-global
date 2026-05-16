@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Calendar, ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
 import DOMPurify from "dompurify";
+import SEO from "@/components/SEO";
 
 interface BlogPostData {
   id: string;
@@ -47,6 +48,24 @@ const BlogPost = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {post && (
+        <SEO
+          title={`${post.title} | Tradevithika Blog`}
+          description={post.excerpt || post.title}
+          path={`/blog/${post.slug}`}
+          type="article"
+          image={post.cover_image || undefined}
+          jsonLd={{
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: post.title,
+            description: post.excerpt || undefined,
+            image: post.cover_image || undefined,
+            datePublished: post.published_at || post.created_at,
+            mainEntityOfPage: `https://indimart-global.lovable.app/blog/${post.slug}`,
+          }}
+        />
+      )}
       <Header />
       <main className="flex-1">
         <div className="container mx-auto px-4 py-8 md:py-12 max-w-3xl">

@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import SEO from "@/components/SEO";
 
 interface Product {
   id: string;
@@ -274,6 +275,27 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEO
+        title={`${product.name} | Tradevithika`}
+        description={(product.description || `${product.name} from verified Indian supplier on Tradevithika.`).slice(0, 160)}
+        path={`/product/${product.id}`}
+        type="product"
+        image={product.images?.[0]}
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: product.name,
+          description: product.description || undefined,
+          image: product.images || undefined,
+          category: product.category_name,
+          offers: product.price ? {
+            "@type": "Offer",
+            price: product.price,
+            priceCurrency: "INR",
+            availability: "https://schema.org/InStock",
+          } : undefined,
+        }}
+      />
       <Header />
       
       <main className="flex-1 bg-muted/30">

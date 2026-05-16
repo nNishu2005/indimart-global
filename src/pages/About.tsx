@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Globe, Shield, Users, Target } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const About = () => {
   const values = [
@@ -38,6 +39,11 @@ const About = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEO
+        title="About Tradevithika — India's Textiles & Apparel Export Platform"
+        description="Learn how Tradevithika connects verified Indian textiles and apparel manufacturers with global buyers through a transparent, secure B2B marketplace."
+        path="/about"
+      />
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
