@@ -105,7 +105,7 @@ const Footer = () => {
         <div className="border-t border-primary-foreground/20 pt-8 mt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-sm text-primary-foreground/80">
-              © 2024 Indimart Global. All rights reserved.
+              © 2026 Tradevithika. All rights reserved.
             </p>
             <div className="flex space-x-6">
               <Link to="/privacy" className="text-sm text-primary-foreground/80 hover:text-secondary transition-colors">
