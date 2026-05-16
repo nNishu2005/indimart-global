@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 import { format } from "date-fns";
+import SEO from "@/components/SEO";
 
 interface BlogPost {
   id: string;
