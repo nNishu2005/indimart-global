@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Globe, Facebook, Twitter, Linkedin, Instagram, Mail, Phone } from "lucide-react";
+import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone } from "lucide-react";
+import logo from "@/assets/tradevithika-logo.png";
 
 const Footer = () => {
   return (
