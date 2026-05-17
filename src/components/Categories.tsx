@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { Shirt, Scissors, Sparkles, Layers, User, Users, Baby, Home, Crown, Spool } from "lucide-react";
+import { Shirt, Scissors, Sparkles, Layers, User, Users, Baby, Home, Crown } from "lucide-react";
 
 const categories = [
   { name: "Cotton Fabrics", icon: Layers, color: "text-blue-600", bgColor: "bg-blue-50" },
