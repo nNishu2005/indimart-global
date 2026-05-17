@@ -39,7 +39,7 @@ const Categories = () => {
                     <h3 className="font-semibold text-lg text-foreground">
                       {category.name}
                     </h3>
-                    <p className="text-sm text-muted-foreground">{category.count}</p>
+                    <p className="text-sm text-muted-foreground">Verified suppliers</p>
                   </div>
                 </CardContent>
               </Card>
