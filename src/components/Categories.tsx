@@ -1,15 +1,17 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { Shirt, Gem, Wrench, Home, Package, Zap } from "lucide-react";
+import { Shirt, Scissors, Sparkles, Layers, User, Users, Baby, Home, Crown } from "lucide-react";
 
 const categories = [
-  {
-    name: "Textiles & Apparel",
-    icon: Shirt,
-    count: "1,200+ Products",
-    color: "text-blue-600",
-    bgColor: "bg-blue-50",
-  },
+  { name: "Cotton Fabrics", icon: Layers, color: "text-blue-600", bgColor: "bg-blue-50" },
+  { name: "Silk Fabrics", icon: Sparkles, color: "text-pink-600", bgColor: "bg-pink-50" },
+  { name: "Synthetic Fabrics", icon: Scissors, color: "text-purple-600", bgColor: "bg-purple-50" },
+  { name: "Men's Apparel", icon: User, color: "text-indigo-600", bgColor: "bg-indigo-50" },
+  { name: "Women's Apparel", icon: Users, color: "text-rose-600", bgColor: "bg-rose-50" },
+  { name: "Kids Apparel", icon: Baby, color: "text-amber-600", bgColor: "bg-amber-50" },
+  { name: "Home Textiles", icon: Home, color: "text-emerald-600", bgColor: "bg-emerald-50" },
+  { name: "Ethnic Wear", icon: Crown, color: "text-orange-600", bgColor: "bg-orange-50" },
+  { name: "Yarn & Threads", icon: Shirt, color: "text-teal-600", bgColor: "bg-teal-50" },
 ];
 
 const Categories = () => {
@@ -37,7 +39,7 @@ const Categories = () => {
                     <h3 className="font-semibold text-lg text-foreground">
                       {category.name}
                     </h3>
-                    <p className="text-sm text-muted-foreground">{category.count}</p>
+                    <p className="text-sm text-muted-foreground">Verified suppliers</p>
                   </div>
                 </CardContent>
               </Card>
