@@ -39,11 +39,10 @@ const Analytics = () => {
       .select('*', { count: 'exact', head: true })
       .eq('supplier_id', user.id);
 
-    // Get active RFQs
-    const { count: rfqsCount } = await supabase
-      .from('rfqs')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'open');
+    // Get active RFQs from the safe public view
+    const { count: rfqsCount } = await (supabase as any)
+      .from('rfqs_open_public')
+      .select('*', { count: 'exact', head: true });
 
     setStats({
       totalProducts,
