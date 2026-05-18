@@ -372,6 +372,13 @@ export type Database = {
             referencedRelation: "rfqs"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "orders_rfq_id_fkey"
+            columns: ["rfq_id"]
+            isOneToOne: false
+            referencedRelation: "rfqs_open_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       payments: {
@@ -626,6 +633,13 @@ export type Database = {
             referencedRelation: "rfqs"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "rfq_responses_rfq_id_fkey"
+            columns: ["rfq_id"]
+            isOneToOne: false
+            referencedRelation: "rfqs_open_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       rfqs: {
@@ -754,6 +768,56 @@ export type Database = {
       }
     }
     Views: {
+      rfqs_open_public: {
+        Row: {
+          buyer_id: string | null
+          category_id: string | null
+          created_at: string | null
+          deadline: string | null
+          description: string | null
+          id: string | null
+          location: string | null
+          quantity: number | null
+          status: string | null
+          title: string | null
+          unit: string | null
+        }
+        Insert: {
+          buyer_id?: string | null
+          category_id?: string | null
+          created_at?: string | null
+          deadline?: string | null
+          description?: string | null
+          id?: string | null
+          location?: string | null
+          quantity?: number | null
+          status?: string | null
+          title?: string | null
+          unit?: string | null
+        }
+        Update: {
+          buyer_id?: string | null
+          category_id?: string | null
+          created_at?: string | null
+          deadline?: string | null
+          description?: string | null
+          id?: string | null
+          location?: string | null
+          quantity?: number | null
+          status?: string | null
+          title?: string | null
+          unit?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rfqs_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       supplier_profiles_public: {
         Row: {
           avatar_url: string | null
@@ -799,6 +863,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_supplier: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "buyer" | "supplier" | "admin"
