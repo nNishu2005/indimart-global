@@ -52,14 +52,13 @@ const RFQInbox = () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    // Get all open RFQs
-    const { data: rfqData } = await supabase
-      .from('rfqs')
+    // Get all open RFQs from the safe public view (excludes target_price)
+    const { data: rfqData } = await (supabase as any)
+      .from('rfqs_open_public')
       .select(`
         *,
         category:categories(name)
       `)
-      .eq('status', 'open')
       .order('created_at', { ascending: false });
 
     // Check which RFQs the supplier has already responded to
