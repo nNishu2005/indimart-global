@@ -29,18 +29,10 @@ const RequestQuote = () => {
 
   useEffect(() => {
     const loadSuppliers = async () => {
-      const { data } = await supabase
-        .from('user_roles')
-        .select('user_id')
-        .eq('role', 'supplier');
-      if (data && data.length > 0) {
-        const ids = data.map(d => d.user_id);
-        const { data: profiles } = await supabase
-          .from('profiles')
-          .select('id, company_name, full_name')
-          .in('id', ids);
-        setSuppliers(profiles || []);
-      }
+      const { data: profiles } = await supabase
+        .from('supplier_profiles_public')
+        .select('id, company_name');
+      setSuppliers((profiles || []).map((p: any) => ({ ...p, full_name: null })));
     };
     loadSuppliers();
   }, []);
