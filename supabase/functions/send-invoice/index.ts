@@ -13,6 +13,30 @@ serve(async (req) => {
   }
 
   try {
+    // --- AUTH CHECK ---
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const anonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+
+    const authedClient = createClient(supabaseUrl, anonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    const { data: { user }, error: userErr } = await authedClient.auth.getUser();
+    if (userErr || !user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const { supplierInfo, invoiceDetails, buyerInfo, items, subtotal, gst, total, notes } = await req.json();
 
     if (!buyerInfo?.email) {
@@ -92,28 +116,6 @@ serve(async (req) => {
       </div>
     `;
 
-    // Send email via Supabase auth admin (resend)
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-
-    // Use resend-like approach via Supabase's built-in email
-    const res = await fetch(`${supabaseUrl}/auth/v1/magiclink`, {
-      method: "POST",
-      headers: {
-        apikey: serviceKey,
-        Authorization: `Bearer ${serviceKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: buyerInfo.email,
-      }),
-    });
-
-    // Since we can't send arbitrary emails via auth, let's use a simple SMTP-free approach
-    // We'll store the invoice and notify via a workaround
-    // For now, we'll use the Supabase edge function to send via fetch to a mail API
-
-    // Fallback: Return the HTML so frontend can open mailto or copy
     return new Response(
       JSON.stringify({
         success: true,
