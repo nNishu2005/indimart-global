@@ -48,37 +48,28 @@ const SupplierList = () => {
     const { data: cats } = await supabase.from('categories').select('id, name').order('name');
     setCategories(cats || []);
 
-    // Load suppliers (users with supplier role)
-    const { data: supplierRoles } = await supabase
-      .from('user_roles')
-      .select('user_id')
-      .eq('role', 'supplier');
+    // Load suppliers directly from the safe public view (already filtered to verified suppliers)
+    const { data: profiles } = await supabase
+      .from('supplier_profiles_public')
+      .select('id, company_name, city, state, country, company_description, is_verified, avatar_url');
 
-    if (supplierRoles && supplierRoles.length > 0) {
-      const supplierIds = supplierRoles.map(r => r.user_id);
-      
-      // Use the safe view that excludes PII (email, phone, pan_number, gst_number)
-      const { data: profiles } = await supabase
-        .from('supplier_profiles_public')
-        .select('id, company_name, city, state, country, company_description, is_verified, avatar_url')
-        .in('id', supplierIds);
-
+    if (profiles && profiles.length > 0) {
       // Get product counts for each supplier
       const suppliersWithCounts = await Promise.all(
-        (profiles || []).map(async (profile) => {
+        profiles.map(async (profile) => {
           const { count } = await supabase
             .from('products')
             .select('*', { count: 'exact', head: true })
             .eq('supplier_id', profile.id)
             .eq('is_approved', true);
-          
+
           return { ...profile, productCount: count || 0 };
         })
       );
 
       setSuppliers(suppliersWithCounts);
     }
-    
+
     setLoading(false);
   };
 
