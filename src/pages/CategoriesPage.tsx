@@ -8,8 +8,8 @@ const CategoriesPage = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <SEO
-        title="Textiles & Apparel Categories | Tradevithika"
-        description="Browse Indian textiles and apparel categories — fabrics, garments, home textiles, and more. Find verified suppliers for every product line."
+        title="Agriculture Categories | Tradevithika"
+        description="Browse Indian agriculture categories — grains, pulses, fruits, vegetables, spices, dairy, farm machinery and more. Find verified suppliers for every produce."
         path="/categories"
       />
       <Header />

@@ -50,6 +50,7 @@ import VerifyDocuments from "./pages/admin/VerifyDocuments";
 import BlogManager from "./pages/admin/BlogManager";
 import UserManagement from "./pages/admin/UserManagement";
 import TransactionAnalytics from "./pages/admin/TransactionAnalytics";
+import CategoryManager from "./pages/admin/CategoryManager";
 
 // Shared Pages
 import Messages from "./pages/Messages";
@@ -193,6 +194,11 @@ const App = () => (
           <Route path="/admin/transactions" element={
             <ProtectedRoute allowedRoles={['admin']}>
               <TransactionAnalytics />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/categories" element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <CategoryManager />
             </ProtectedRoute>
           } />
           
