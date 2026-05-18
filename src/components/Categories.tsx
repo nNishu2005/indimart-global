@@ -1,17 +1,20 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { Shirt, Scissors, Sparkles, Layers, User, Users, Baby, Home, Crown } from "lucide-react";
+import { Wheat, Sprout, Carrot, Apple, Flame, Milk, Droplet, Coffee, Leaf, FlaskConical, Tractor, Bird } from "lucide-react";
 
 const categories = [
-  { name: "Cotton Fabrics", icon: Layers, color: "text-blue-600", bgColor: "bg-blue-50" },
-  { name: "Silk Fabrics", icon: Sparkles, color: "text-pink-600", bgColor: "bg-pink-50" },
-  { name: "Synthetic Fabrics", icon: Scissors, color: "text-purple-600", bgColor: "bg-purple-50" },
-  { name: "Men's Apparel", icon: User, color: "text-indigo-600", bgColor: "bg-indigo-50" },
-  { name: "Women's Apparel", icon: Users, color: "text-rose-600", bgColor: "bg-rose-50" },
-  { name: "Kids Apparel", icon: Baby, color: "text-amber-600", bgColor: "bg-amber-50" },
-  { name: "Home Textiles", icon: Home, color: "text-emerald-600", bgColor: "bg-emerald-50" },
-  { name: "Ethnic Wear", icon: Crown, color: "text-orange-600", bgColor: "bg-orange-50" },
-  { name: "Yarn & Threads", icon: Shirt, color: "text-teal-600", bgColor: "bg-teal-50" },
+  { name: "Grains & Cereals", icon: Wheat, color: "text-amber-700", bgColor: "bg-amber-50" },
+  { name: "Pulses & Lentils", icon: Sprout, color: "text-yellow-700", bgColor: "bg-yellow-50" },
+  { name: "Fresh Vegetables", icon: Carrot, color: "text-orange-600", bgColor: "bg-orange-50" },
+  { name: "Fresh Fruits", icon: Apple, color: "text-red-600", bgColor: "bg-red-50" },
+  { name: "Spices & Herbs", icon: Flame, color: "text-rose-700", bgColor: "bg-rose-50" },
+  { name: "Dairy & Milk Products", icon: Milk, color: "text-blue-600", bgColor: "bg-blue-50" },
+  { name: "Oilseeds & Edible Oils", icon: Droplet, color: "text-yellow-600", bgColor: "bg-yellow-50" },
+  { name: "Tea, Coffee & Beverages", icon: Coffee, color: "text-amber-800", bgColor: "bg-amber-50" },
+  { name: "Seeds & Saplings", icon: Leaf, color: "text-green-600", bgColor: "bg-green-50" },
+  { name: "Fertilizers & Pesticides", icon: FlaskConical, color: "text-emerald-700", bgColor: "bg-emerald-50" },
+  { name: "Farm Machinery & Tools", icon: Tractor, color: "text-slate-700", bgColor: "bg-slate-50" },
+  { name: "Livestock & Poultry", icon: Bird, color: "text-stone-700", bgColor: "bg-stone-50" },
 ];
 
 const Categories = () => {
@@ -20,16 +23,16 @@ const Categories = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-            Browse by Category
+            Browse Agriculture Categories
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover quality products from verified Indian manufacturers across various categories
+            Discover quality agricultural produce and inputs from verified Indian farmers and suppliers
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((category) => (
-            <Link key={category.name} to={`/products?category=${category.name}`}>
+            <Link key={category.name} to={`/products?category=${encodeURIComponent(category.name)}`}>
               <Card className="hover:shadow-lg transition-all cursor-pointer border-2 hover:border-secondary">
                 <CardContent className="flex items-center space-x-4 p-6">
                   <div className={`${category.bgColor} p-4 rounded-lg`}>
