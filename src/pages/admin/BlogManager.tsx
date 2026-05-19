@@ -45,6 +45,7 @@ const BlogManager = () => {
   const [editing, setEditing] = useState<string | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const fetchPosts = async () => {
     const { data } = await supabase
