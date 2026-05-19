@@ -170,6 +170,10 @@ const AdminDashboard = () => {
             </Button>
           </CardContent>
         </Card>
+
+        <div className="mt-8">
+          <SupplierVerificationPanel />
+        </div>
       </main>
       <Footer />
     </div>
