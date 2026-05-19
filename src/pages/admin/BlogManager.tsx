@@ -189,8 +189,38 @@ const BlogManager = () => {
                   <Textarea value={form.content} onChange={(e) => setForm((f) => ({ ...f, content: e.target.value }))} placeholder="<h2>Introduction</h2><p>Your content here...</p>" rows={10} />
                 </div>
                 <div>
-                  <Label>Cover Image URL</Label>
-                  <Input value={form.cover_image} onChange={(e) => setForm((f) => ({ ...f, cover_image: e.target.value }))} placeholder="https://..." />
+                  <Label>Cover Image</Label>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    disabled={uploading}
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      setUploading(true);
+                      const ext = file.name.split(".").pop();
+                      const path = `covers/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+                      const { error: upErr } = await supabase.storage
+                        .from("blog-images")
+                        .upload(path, file, { upsert: false });
+                      if (upErr) {
+                        toast({ title: "Upload failed", description: upErr.message, variant: "destructive" });
+                      } else {
+                        const { data } = supabase.storage.from("blog-images").getPublicUrl(path);
+                        setForm((f) => ({ ...f, cover_image: data.publicUrl }));
+                        toast({ title: "Image uploaded" });
+                      }
+                      setUploading(false);
+                    }}
+                  />
+                  {form.cover_image && (
+                    <div className="mt-2 flex items-center gap-3">
+                      <img src={form.cover_image} alt="cover" className="h-20 w-32 object-cover rounded border" />
+                      <Button type="button" variant="ghost" size="sm" onClick={() => setForm((f) => ({ ...f, cover_image: "" }))}>
+                        Remove
+                      </Button>
+                    </div>
+                  )}
                 </div>
                 <div>
                   <Label>Tags (comma separated)</Label>
