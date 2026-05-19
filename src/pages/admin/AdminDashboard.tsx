@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { Users, Package, FileText, Shield, FileBadge, PenLine, TrendingUp, DollarSign, ShieldCheck, FolderTree } from 'lucide-react';
+import SupplierVerificationPanel from '@/components/admin/SupplierVerificationPanel';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -169,6 +170,10 @@ const AdminDashboard = () => {
             </Button>
           </CardContent>
         </Card>
+
+        <div className="mt-8">
+          <SupplierVerificationPanel />
+        </div>
       </main>
       <Footer />
     </div>
